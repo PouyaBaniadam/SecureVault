@@ -20,9 +20,10 @@ class ResourcePath:
 
     @classmethod
     def initialize_paths(cls):
+        cls.font_path = cls.resource_path("ubuntu.ttf")
         cls.background_path = cls.resource_path("background.png")
         cls.lock_path = cls.resource_path("lock.png")
-        cls.font_path = cls.resource_path("ubuntu.ttf")
-
+        cls.export_path = cls.resource_path("export.png")
+        cls.import_path = cls.resource_path("import.png")
 
 ResourcePath.initialize_paths()
