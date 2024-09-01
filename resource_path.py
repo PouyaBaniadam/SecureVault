@@ -3,18 +3,26 @@ import sys
 
 
 class ResourcePath:
+    lock_path = None
+    background_path = None
+    font_path = None
+
     @classmethod
-    def resource_path(cls, relative_path):
+    def resource_path(cls, file_name):
         try:
             base_path = sys._MEIPASS
         except AttributeError:
             base_path = os.path.abspath("assets")
-        return os.path.join(base_path, relative_path)
+
+        full_path = os.path.join(base_path, file_name)
+
+        return full_path
 
     @classmethod
-    def lock(cls):
-        return cls.resource_path("lock.png")
+    def initialize_paths(cls):
+        cls.lock_path = cls.resource_path("lock.png")
+        cls.background_path = cls.resource_path("background.png")
+        cls.font_path = cls.resource_path("ubuntu.ttf")
 
-    @classmethod
-    def background_image(cls):
-        return cls.resource_path("background.png")
+
+ResourcePath.initialize_paths()
