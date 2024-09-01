@@ -1,6 +1,8 @@
+# ui.py
 from PySide6.QtWidgets import QMainWindow, QLabel
 from PySide6.QtGui import QIcon, QPixmap
 from resource_path import ResourcePath
+
 
 class SecureVault(QMainWindow, ResourcePath):
     def __init__(self):
@@ -14,6 +16,9 @@ class SecureVault(QMainWindow, ResourcePath):
         self.setWindowIcon(QIcon(icon_path))
 
         self.set_background_image()
+
+        self.sample_label = QLabel("Test if the font is loaded...", self)
+        self.sample_label.setGeometry(50, 400, 300, 30)
 
     def set_background_image(self):
         bg_image_path = self.background_path

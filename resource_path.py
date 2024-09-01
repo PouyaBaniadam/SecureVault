@@ -20,8 +20,8 @@ class ResourcePath:
 
     @classmethod
     def initialize_paths(cls):
-        cls.lock_path = cls.resource_path("lock.png")
         cls.background_path = cls.resource_path("background.png")
+        cls.lock_path = cls.resource_path("lock.png")
         cls.font_path = cls.resource_path("ubuntu.ttf")
 
 
