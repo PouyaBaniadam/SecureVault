@@ -12,5 +12,9 @@ class ResourcePath:
         return os.path.join(base_path, relative_path)
 
     @classmethod
-    def lock_png(cls):
+    def lock(cls):
         return cls.resource_path("lock.png")
+
+    @classmethod
+    def background_image(cls):
+        return cls.resource_path("background.png")
