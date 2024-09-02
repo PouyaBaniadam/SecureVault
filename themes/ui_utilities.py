@@ -46,9 +46,9 @@ class UIUtilities:
 
     def load_QLineEditStyle(self, **kwargs) -> None:
         self.background_color = kwargs.get("background_color")
-        self.color = kwargs.get("color", "#000000")
+        self.color = kwargs.get("color")
         self.font_size = kwargs.get("font_size")
-        self.border_color = kwargs.get("border_color", "#dddddd")
+        self.border_color = kwargs.get("border_color")
         self.border_radius = kwargs.get("border_radius")
         self.padding = kwargs.get("padding")
         self.selection_color = kwargs.get("selection_color")

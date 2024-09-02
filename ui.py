@@ -21,18 +21,15 @@ class SecureVault(QMainWindow, Utilities, BaseSettings):
         self.setWindowTitle("Secure Vault")
         self.setFixedSize(400, 500)
 
-        icon_path = Assets.lock_png
-        self.setWindowIcon(QIcon(icon_path))
+        self.setWindowIcon(QIcon(Assets.lock_png))
 
         self.set_background_image()
 
         self.load_base_widgets()
 
     def set_background_image(self):
-        bg_pixmap = QPixmap(Assets.background_png)
-
         self.bg_label = QLabel(self)
-        self.bg_label.setPixmap(bg_pixmap)
+        self.bg_label.setPixmap(QPixmap(Assets.background_png))
         self.bg_label.setGeometry(0, 0, self.width(), self.height())
         self.bg_label.setScaledContents(True)
 
@@ -45,10 +42,10 @@ class SecureVault(QMainWindow, Utilities, BaseSettings):
             w=300,
             h=30,
             on_enter=self.print_test,
-            background_color="#FFFFFF",
-            color="#000000",
+            background_color=self.light_color,
+            color=self.dark_color,
             font_size=14,
-            border_color="#dddddd",
+            border_color=self.light_color,
             border_radius=10,
             padding=5,
             selection_background_color=self.primary_color
@@ -63,7 +60,7 @@ class SecureVault(QMainWindow, Utilities, BaseSettings):
             h=50,
             on_click=self.print_test,
             background_color=self.primary_color,
-            color="#000000",
+            color=self.dark_color,
         )
 
         self.import_button = TextIconButton(
@@ -77,7 +74,7 @@ class SecureVault(QMainWindow, Utilities, BaseSettings):
             border_radius=15,
             on_click=self.print_test,
             background_color=self.primary_color,
-            color="#ffffff",
+            color=self.light_color,
         )
 
         self.export_button = TextIconButton(
@@ -91,5 +88,5 @@ class SecureVault(QMainWindow, Utilities, BaseSettings):
             border_radius=15,
             on_click=self.print_test,
             background_color=self.primary_color,
-            color="#ffffff",
+            color=self.light_color,
         )

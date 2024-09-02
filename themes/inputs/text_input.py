@@ -9,7 +9,6 @@ class TextInput(QLineEdit, UIUtilities):
 
         self.setPlaceholderText(placeholder_text)
 
-        # Load styles from UIUtilities
         self.load_QLineEditStyle(**kwargs)
 
         self.setStyleSheet(
