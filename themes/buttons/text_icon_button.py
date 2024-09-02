@@ -1,19 +1,24 @@
 from PySide6.QtWidgets import QPushButton
-from PySide6.QtCore import Qt
+from PySide6.QtGui import QIcon
+from PySide6.QtCore import Qt, QSize
 
 from themes.ui_utilities import UIUtilities
 
 
-class TextButton(QPushButton, UIUtilities):
+class TextIconButton(QPushButton, UIUtilities):
     """
-    This class is for showing a button with only a text on it.
+    This class is for showing a button with both icon and a text on it.
     """
-    def __init__(self, parent=None, text="", x=0, y=0, w=120, h=40, on_click=None, **kwargs):
+    def __init__(self, parent=None, text="", icon_path="", x=0, y=0, w=0, h=0, on_click=None, **kwargs):
         super().__init__(text, parent)
 
         self.load_QPushButtonStyle(**kwargs)
 
         darker_color = self.darken_color(self.background_color, factor=0.9)
+
+        if icon_path:
+            self.setIcon(QIcon(icon_path))
+            self.setIconSize(QSize(w - 10, h - 10))
 
         self.setStyleSheet(
             f"""
@@ -22,6 +27,8 @@ class TextButton(QPushButton, UIUtilities):
                 color: {self.color}; 
                 font-weight: {self.font_weight};
                 border-radius: {self.border_radius}px;
+                padding: {self.padding}px;
+                text-align: {self.text_align};
             }}
             QPushButton:hover {{
                 background-color: {darker_color};

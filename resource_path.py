@@ -25,5 +25,6 @@ class ResourcePath:
         cls.lock_path = cls.resource_path("lock.png")
         cls.export_path = cls.resource_path("export.png")
         cls.import_path = cls.resource_path("import.png")
+        cls.search_password = cls.resource_path("search_password.png")
 
 ResourcePath.initialize_paths()

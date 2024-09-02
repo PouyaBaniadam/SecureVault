@@ -3,6 +3,10 @@ from PySide6.QtWidgets import QPushButton
 
 class UIUtilities:
     def __init__(self):
+        self.selection_color = None
+        self.selection_background_color = None
+        self.border_color = None
+        self.font_size = None
         self.background_color = None
         self.background_color = None
         self.color = None
@@ -26,7 +30,7 @@ class UIUtilities:
 
         return color
 
-    def load_QPushButtonStyle(self, **kwargs: dict) -> None:
+    def load_QPushButtonStyle(self, **kwargs) -> None:
         """
         This function loads everything we need as we define a button that inherit from QPushButton
         So it gets all the available arguments and do the magic :)
@@ -38,3 +42,14 @@ class UIUtilities:
         self.border_radius = kwargs.get("border_radius")
         self.padding = kwargs.get("padding")
         self.text_align = kwargs.get("text_align")
+
+
+    def load_QLineEditStyle(self, **kwargs) -> None:
+        self.background_color = kwargs.get("background_color")
+        self.color = kwargs.get("color", "#000000")
+        self.font_size = kwargs.get("font_size")
+        self.border_color = kwargs.get("border_color", "#dddddd")
+        self.border_radius = kwargs.get("border_radius")
+        self.padding = kwargs.get("padding")
+        self.selection_color = kwargs.get("selection_color")
+        self.selection_background_color = kwargs.get("selection_background_color")
