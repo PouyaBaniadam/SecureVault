@@ -2,14 +2,14 @@ from PySide6.QtGui import QIcon, QPixmap
 from PySide6.QtWidgets import QMainWindow, QLabel
 
 from generator.assets import Assets
-from settings import BaseSettings
+from settings import Settings
 from themes.buttons.icon_button import IconButton
 from themes.buttons.text_icon_button import TextIconButton
 from themes.inputs.text_input import TextInput
 from utilities import Utilities
 
 
-class SecureVault(QMainWindow, Utilities, BaseSettings):
+class SecureVault(QMainWindow, Utilities, Settings):
     def __init__(self):
         super().__init__()
 
@@ -41,7 +41,7 @@ class SecureVault(QMainWindow, Utilities, BaseSettings):
             y=70,
             w=300,
             h=30,
-            on_enter=self.print_test,
+            on_text_change=lambda: self.print_text(self.search_input.text()),
             background_color=self.light_color,
             color=self.dark_color,
             font_size=14,

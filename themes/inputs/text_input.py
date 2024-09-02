@@ -4,7 +4,7 @@ from themes.ui_utilities import UIUtilities
 
 
 class TextInput(QLineEdit, UIUtilities):
-    def __init__(self, parent=None, placeholder_text="", x=0, y=0, w=0, h=0, on_enter=None, **kwargs):
+    def __init__(self, parent=None, placeholder_text="", x=0, y=0, w=0, h=0, on_text_change=None, **kwargs):
         super().__init__(parent)
 
         self.setPlaceholderText(placeholder_text)
@@ -29,5 +29,4 @@ class TextInput(QLineEdit, UIUtilities):
         self.setFixedSize(w, h)
         self.setGeometry(x, y, w, h)
 
-        if on_enter:
-            self.returnPressed.connect(on_enter)
+        self.textChanged.connect(on_text_change)
