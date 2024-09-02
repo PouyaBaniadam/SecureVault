@@ -15,7 +15,9 @@ class Assets:
 		cls.background_png = cls.resource_path("background.png")
 		cls.export_png = cls.resource_path("export.png")
 		cls.import_png = cls.resource_path("import.png")
+		cls.lock_ico = cls.resource_path("lock.ico")
 		cls.lock_png = cls.resource_path("lock.png")
+		cls.padlock_png = cls.resource_path("padlock.png")
 		cls.search_password_png = cls.resource_path("search_password.png")
 		cls.ubuntu_ttf = cls.resource_path("ubuntu.ttf")
 
