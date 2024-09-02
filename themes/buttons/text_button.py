@@ -8,7 +8,7 @@ class TextButton(QPushButton, UIUtilities):
     """
     This class is for showing a button with only a text on it.
     """
-    def __init__(self, parent=None, text="", x=0, y=0, w=120, h=40, on_click=None, **kwargs):
+    def __init__(self, parent=None, text="", x=0, y=0, w=0, h=0, on_click=None, **kwargs):
         super().__init__(text, parent)
 
         self.load_QPushButtonStyle(**kwargs)
