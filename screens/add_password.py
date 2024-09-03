@@ -37,7 +37,7 @@ class BackEnd:
                 color = Settings.WARNING_COLOR
 
         else:
-            status = OPTIONS.EMPTY
+            status = Messages.field_is_required(field="Password")
             color = Settings.DANGER_COLOR
 
         return status, color
@@ -80,7 +80,17 @@ class AddPasswordDialog(QDialog):
     def __init__(self, parent=None):
         super().__init__(parent)
         self.setWindowTitle(Messages.ADD_PASSWORD)
-        self.setFixedSize(300, 200)
+        self.setFixedSize(400, 250)  # Resized dialog
+
+        # Label of Input field for label
+        self.label_status = TextLabel(
+            parent=self,
+            text="Label",
+            x=10,
+            y=0,
+            w=60,
+            h=30,
+        )
 
         # Input field for label
         self.input_label = TextInput(
@@ -88,7 +98,7 @@ class AddPasswordDialog(QDialog):
             placeholder_text=Messages.enter_field(field="label"),
             x=10,
             y=30,
-            w=275,
+            w=380,
             h=30,
             on_text_change=lambda: BackEnd.does_label_exist(self.input_label.text()),
             background_color=Settings.LIGHT_COLOR,
@@ -104,20 +114,30 @@ class AddPasswordDialog(QDialog):
             parent=self,
             text="",
             x=10,
-            y=50,
-            w=250,
-            h=50,
+            y=65,
+            w=380,
+            h=20,
         )
 
         self.input_label.textChanged.connect(self.on_input_label_changed)
+
+        # Label of Input field for password
+        self.label_password = TextLabel(
+            parent=self,
+            text="Password",
+            x=10,
+            y=85,
+            w=80,
+            h=30,
+        )
 
         # Input field for password
         self.input_password = TextInput(
             parent=self,
             placeholder_text=Messages.enter_field(field="password"),
             x=10,
-            y=90,
-            w=275,
+            y=115,
+            w=380,
             h=30,
             background_color=Settings.LIGHT_COLOR,
             color=Settings.DARK_COLOR,
@@ -132,9 +152,9 @@ class AddPasswordDialog(QDialog):
             parent=self,
             text="",
             x=10,
-            y=110,
-            w=250,
-            h=50,
+            y=150,
+            w=380,
+            h=20,
         )
 
         self.input_password.textChanged.connect(self.on_input_password_changed)
@@ -143,10 +163,10 @@ class AddPasswordDialog(QDialog):
         self.save_button = TextButton(
             parent=self,
             text="Save",
-            x=50,
-            y=150,
+            x=100,
+            y=180,
             w=200,
-            h=30,
+            h=40,
             on_click=self.validate_and_save,
             background_color=Settings.PRIMARY_COLOR,
             color=Settings.LIGHT_COLOR,
@@ -167,7 +187,7 @@ class AddPasswordDialog(QDialog):
                 self.label_status.update_text(Messages.VALID_LABEL)
                 self.label_status.setStyleSheet(f"color: {Settings.SUCCESS_COLOR};")
         else:
-            self.label_status.update_text(Messages.field_is_required(field="label"))
+            self.label_status.update_text(Messages.field_is_required(field="Label"))
             self.label_status.setStyleSheet(f"color: {Settings.DANGER_COLOR};")
 
     def on_input_password_changed(self):
