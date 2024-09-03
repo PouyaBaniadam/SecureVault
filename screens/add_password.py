@@ -1,4 +1,7 @@
+import random
 import re
+import string
+
 from PySide6.QtWidgets import QDialog, QMessageBox
 
 from database.fake_data import FakeData
@@ -20,11 +23,11 @@ class BackEnd:
         Evaluates the strength of a password and returns a tuple with the strength message and color.
         """
         if plain_password != "":
-            if len(plain_password) < 6:
+            if len(plain_password) < Settings.MIN_PASSWORD_LENGTH:
                 status = OPTIONS.WEAK
                 color = Settings.WARNING_COLOR
 
-            elif len(plain_password) >= 6 and (
+            elif len(plain_password) >= Settings.MIN_PASSWORD_LENGTH and (
                     re.search("[a-zA-Z]", plain_password) and re.search("[0-9]", plain_password)):
                 if len(plain_password) >= 8 and re.search("[!@#$%^&*(),.?\":{}|<>]", plain_password):
                     status = OPTIONS.STRONG
@@ -77,12 +80,56 @@ class BackEnd:
             message = Messages.PASSWORD_SAVED
             return True, message
 
+    @staticmethod
+    def generate_random_code(code_length: int = Settings.MIN_PASSWORD_LENGTH, *allowed_characters: str) -> str:
+        """
+        This function generates a random string of characters.
+        By default, it generates 8 random digits. But if you prefer more, just give it the arguments!
+
+        optional param code_length: The length of the generated code
+        :optional param allowed_characters: A tuple of strings that defines which characters are allowed
+        :return: A randomly generated string with at least one letter, one number, and one punctuation
+        """
+
+        # Combine all allowed characters into a single string
+        allowed_characters: str = "".join(allowed_characters)
+
+        # If no allowed characters are specified, use default allowed characters (digits)
+        if len(allowed_characters) == 0:
+            allowed_characters = string.digits
+
+        # Ensure that allowed_characters include at least letters, digits, and punctuation
+        if not any(char.isalpha() for char in allowed_characters):
+            allowed_characters += string.ascii_uppercase
+        if not any(char.isdigit() for char in allowed_characters):
+            allowed_characters += string.digits
+        if not any(char in string.punctuation for char in allowed_characters):
+            allowed_characters += string.punctuation
+
+        # Ensure the password has at least one letter, one digit, and one punctuation
+        password_chars = [
+            random.choice(string.ascii_uppercase),  # At least one letter
+            random.choice(string.digits),  # At least one digit
+            random.choice(string.punctuation)  # At least one punctuation
+        ]
+
+        # Generate the remaining characters randomly from the allowed set
+        password_chars.extend(random.choice(allowed_characters) for _ in range(code_length - 3))
+
+        # Shuffle the characters to ensure randomness
+        random.shuffle(password_chars)
+
+        # Convert list to a string and return
+        code = "".join(password_chars)
+
+        return code
+
 
 class AddPasswordDialog(QDialog):
     def __init__(self, parent=None):
         super().__init__(parent)
         self.setWindowTitle(Messages.ADD_PASSWORD)
-        self.setFixedSize(400, 250)  # Resized dialog
+        self.setFixedSize(400, 250)
 
         # Label of Input field for label
         self.label_status = TextLabel(
@@ -153,6 +200,7 @@ class AddPasswordDialog(QDialog):
             parent=self,
             text=Messages.GENERATE,
             icon_path=Assets.generate_password_png,
+            on_click=self.generate_password,
             x=275,
             y=115,
             w=120,
@@ -240,3 +288,12 @@ class AddPasswordDialog(QDialog):
             msg_box.setWindowTitle(OPTIONS.ERROR)
 
         msg_box.exec()
+
+    def generate_password(self):
+        # Generate a random password
+        generated_password = BackEnd.generate_random_code(
+            Settings.MAX_PASSWORD_LENGTH,
+            Settings.GENERIC_PASSWORD_ALLOWED_CHARACTERS,
+        )
+
+        self.input_password.setText(generated_password)

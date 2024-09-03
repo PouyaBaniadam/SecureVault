@@ -1,3 +1,6 @@
+import string
+
+
 class Settings:
     # Data base
     DB_NAME = "password_manager.db"
@@ -17,4 +20,8 @@ class Settings:
     BUTTON_HEIGHT = 30
 
     # Password
+    GENERIC_PASSWORD_ALLOWED_CHARACTERS = string.ascii_letters + string.digits + string.punctuation
+    MIN_PASSWORD_LENGTH = 8
+    MAX_PASSWORD_LENGTH = 24
+
     MASTER_PASSWORD = "master_password"
