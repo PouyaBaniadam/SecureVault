@@ -2,9 +2,9 @@ from PySide6.QtGui import QIcon, QPixmap
 from PySide6.QtWidgets import QMainWindow, QLabel
 
 from generator.assets import Assets
-from messages import Messages
+from statics.messages import Messages
 from screens.add_password import AddPasswordDialog
-from settings import Settings
+from statics.settings import Settings
 from themes.buttons.icon_button import IconButton
 from themes.buttons.text_icon_button import TextIconButton
 from themes.inputs.text_input import TextInput
