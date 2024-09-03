@@ -46,7 +46,7 @@ class SecureVault(QMainWindow):
             background_color=Settings.LIGHT_COLOR,
             color=Settings.DARK_COLOR,
             border_color=Settings.LIGHT_COLOR,
-            border_radius=10,
+            border_radius=Settings.BUTTON_BORDER_RADIUS,
             padding=5,
             selection_background_color=Settings.PRIMARY_COLOR
         )
@@ -66,7 +66,7 @@ class SecureVault(QMainWindow):
             parent=self,
             icon_path=Assets.padlock_png,
             x=175,
-            y=448,
+            y=440,
             w=Settings.ICON_SIZE,
             h=Settings.ICON_SIZE,
             on_click=self.show_add_password_dialog,  # Connect button click to show the dialog
@@ -79,8 +79,8 @@ class SecureVault(QMainWindow):
             x=15,
             y=450,
             w=140,
-            h=40,
-            border_radius=15,
+            h=Settings.BUTTON_HEIGHT,
+            border_radius=Settings.BUTTON_BORDER_RADIUS,
             background_color=Settings.PRIMARY_COLOR,
             color=Settings.LIGHT_COLOR,
         )
@@ -92,8 +92,8 @@ class SecureVault(QMainWindow):
             x=245,
             y=450,
             w=140,
-            h=40,
-            border_radius=15,
+            h=Settings.BUTTON_HEIGHT,
+            border_radius=Settings.BUTTON_BORDER_RADIUS,
             background_color=Settings.PRIMARY_COLOR,
             color=Settings.LIGHT_COLOR,
         )

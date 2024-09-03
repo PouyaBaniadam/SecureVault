@@ -13,6 +13,8 @@ class Settings:
 
     # Dimensions
     ICON_SIZE = 50
+    BUTTON_BORDER_RADIUS = 10
+    BUTTON_HEIGHT = 30
 
     # Password
     MASTER_PASSWORD = "master_password"

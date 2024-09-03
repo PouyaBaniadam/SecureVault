@@ -14,6 +14,7 @@ class Assets:
 	def initialize_paths(cls):
 		cls.background_png = cls.resource_path("background.png")
 		cls.export_png = cls.resource_path("export.png")
+		cls.generate_password_png = cls.resource_path("generate_password.png")
 		cls.import_png = cls.resource_path("import.png")
 		cls.lock_ico = cls.resource_path("lock.ico")
 		cls.lock_png = cls.resource_path("lock.png")

@@ -3,10 +3,12 @@ from PySide6.QtWidgets import QDialog, QMessageBox
 
 from database.fake_data import FakeData
 from encyption.encryption_utils import EncryptionUtils
+from generator.assets import Assets
 from messages import Messages
 from options import OPTIONS
 from settings import Settings
 from themes.buttons.text_button import TextButton
+from themes.buttons.text_icon_button import TextIconButton
 from themes.inputs.text_input import TextInput
 from themes.labels.text_label import TextLabel
 
@@ -104,7 +106,7 @@ class AddPasswordDialog(QDialog):
             background_color=Settings.LIGHT_COLOR,
             color=Settings.DARK_COLOR,
             border_color=Settings.LIGHT_COLOR,
-            border_radius=10,
+            border_radius=Settings.BUTTON_BORDER_RADIUS,
             padding=5,
             selection_background_color=Settings.PRIMARY_COLOR
         )
@@ -137,14 +139,27 @@ class AddPasswordDialog(QDialog):
             placeholder_text=Messages.enter_field(field="password"),
             x=10,
             y=115,
-            w=380,
+            w=260,
             h=30,
             background_color=Settings.LIGHT_COLOR,
             color=Settings.DARK_COLOR,
             border_color=Settings.LIGHT_COLOR,
-            border_radius=10,
+            border_radius=Settings.BUTTON_BORDER_RADIUS,
             padding=5,
             selection_background_color=Settings.PRIMARY_COLOR
+        )
+
+        self.generate_password_button = TextIconButton(
+            parent=self,
+            text=Messages.GENERATE,
+            icon_path=Assets.generate_password_png,
+            x=275,
+            y=115,
+            w=120,
+            h=30,
+            border_radius=Settings.BUTTON_BORDER_RADIUS,
+            background_color=Settings.PRIMARY_COLOR,
+            color=Settings.LIGHT_COLOR,
         )
 
         # Status label for password strength
@@ -162,15 +177,15 @@ class AddPasswordDialog(QDialog):
         # Save button
         self.save_button = TextButton(
             parent=self,
-            text="Save",
+            text=Messages.SAVE,
             x=100,
-            y=180,
+            y=200,
             w=200,
-            h=40,
+            h=30,
             on_click=self.validate_and_save,
             background_color=Settings.PRIMARY_COLOR,
             color=Settings.LIGHT_COLOR,
-            border_radius=10,
+            border_radius=Settings.BUTTON_BORDER_RADIUS,
         )
 
     def on_input_label_changed(self):
