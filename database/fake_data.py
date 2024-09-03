@@ -2,13 +2,13 @@ class FakeData:
     fake_data: list = [
         {
             "id": 1,
-            "label": "Ruby on rails",
+            "label": "ruby on rails",
             "password": "password_test_1",
             "created_at": "1/1/1010"
         },
         {
             "id": 2,
-            "label": "Python",
+            "label": "python",
             "password": "password_test_2",
             "created_at": "1/1/1010"
         },

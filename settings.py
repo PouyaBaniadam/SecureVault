@@ -1,14 +1,18 @@
 class Settings:
     # Data base
-    db_name = "password_manager.db"
+    DB_NAME = "password_manager.db"
 
     # UI
-    primary_color = "#5200BA"
-    dark_color = "#1E1E1E"
-    light_color = "#B7B7B7"
+    PRIMARY_COLOR = "#5200BA"
+    DARK_COLOR = "#1E1E1E"
+    LIGHT_COLOR = "#B7B7B7"
+    DANGER_COLOR = "#D62323"
+    SUCCESS_COLOR = "#31C169"
+    WARNING_COLOR = "#FF6E24"
+    INFO_COLOR = "#0895DA"
 
     # Dimensions
-    icon_size = 50
+    ICON_SIZE = 50
 
     # Password
-    master_password = "master_password"
+    MASTER_PASSWORD = "master_password"

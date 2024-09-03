@@ -3,8 +3,7 @@ from PySide6.QtWidgets import QApplication
 from PySide6.QtGui import QFontDatabase, QFont
 
 from generator.assets import Assets
-from ui import SecureVault
-
+from screens.main import SecureVault
 
 if __name__ == "__main__":
     # UI loader

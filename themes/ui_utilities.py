@@ -53,3 +53,9 @@ class UIUtilities:
         self.padding = kwargs.get("padding")
         self.selection_color = kwargs.get("selection_color")
         self.selection_background_color = kwargs.get("selection_background_color")
+
+
+    def load_QLabelStyle(self, **kwargs) -> None:
+        self.background_color = kwargs.get("background_color")
+        self.color = kwargs.get("color")
+        self.font_weight = kwargs.get("font_weight")
