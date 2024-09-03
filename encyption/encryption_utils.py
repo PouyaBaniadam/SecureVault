@@ -14,7 +14,7 @@ class EncryptionUtils:
         :param master_password: The master password to generate the encryption key.
         """
         self.master_password = master_password.encode()
-        self.salt = os.urandom(16)  # Generate a random salt
+        self.salt = os.urandom(16)
         self.backend = default_backend()
         self.key = self.derive_key(self.master_password, self.salt)
 

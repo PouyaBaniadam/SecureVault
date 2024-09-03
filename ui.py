@@ -1,5 +1,5 @@
 from PySide6.QtGui import QIcon, QPixmap
-from PySide6.QtWidgets import QMainWindow, QLabel, QDialog, QVBoxLayout, QPushButton, QMessageBox
+from PySide6.QtWidgets import QMainWindow, QLabel, QDialog, QVBoxLayout, QMessageBox
 
 from generator.assets import Assets
 from settings import Settings
@@ -46,7 +46,6 @@ class SecureVault(QMainWindow, Utilities, Settings):
             on_text_change=lambda: self.print_text(self.search_input.text()),
             background_color=self.light_color,
             color=self.dark_color,
-            font_size=14,
             border_color=self.light_color,
             border_radius=10,
             padding=5,
@@ -104,7 +103,6 @@ class SecureVault(QMainWindow, Utilities, Settings):
         )
 
     def show_add_password_dialog(self):
-        # Instantiate and display the dialog when the button is clicked
         dialog = AddPasswordDialog(self)
         dialog.exec()
 
@@ -126,11 +124,12 @@ class AddPasswordDialog(QDialog, Utilities, Settings):
             w=275,
             h=30,
             on_text_change=lambda: self.does_label_exist(self.input_label.text()),
-            background_color=Settings.light_color,
-            color=Settings.dark_color,
-            border_color=Settings.primary_color,
-            border_radius=5,
+            background_color=self.light_color,
+            color=self.dark_color,
+            border_color=self.light_color,
+            border_radius=10,
             padding=5,
+            selection_background_color=self.primary_color
         )
 
         self.input_password = TextInput(
@@ -140,11 +139,12 @@ class AddPasswordDialog(QDialog, Utilities, Settings):
             y=90,
             w=275,
             h=30,
-            background_color=Settings.light_color,
-            color=Settings.dark_color,
-            border_color=Settings.primary_color,
-            border_radius=5,
+            background_color=self.light_color,
+            color=self.dark_color,
+            border_color=self.light_color,
+            border_radius=10,
             padding=5,
+            selection_background_color=self.primary_color
         )
 
         self.save_button = TextButton(
