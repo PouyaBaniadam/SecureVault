@@ -42,7 +42,7 @@ class AddPasswordDialog(QDialog):
             text="",
             x=10,
             y=50,
-            w=200,
+            w=250,
             h=50,
         )
 
@@ -70,7 +70,7 @@ class AddPasswordDialog(QDialog):
             text="",
             x=10,
             y=110,
-            w=200,
+            w=250,
             h=50,
         )
 
