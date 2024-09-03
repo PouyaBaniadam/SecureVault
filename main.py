@@ -12,9 +12,8 @@ if __name__ == "__main__":
 
     # Global font loader
     font_id = QFontDatabase.addApplicationFont(Assets.ubuntu_ttf)
-    if font_id != -1:
-        font_family = QFontDatabase.applicationFontFamilies(font_id)[0]
-        app.setFont(QFont(font_family))
+    font_family = QFontDatabase.applicationFontFamilies(font_id)[0]
+    app.setFont(QFont(font_family))
 
     window = SecureVault()
     window.show()
