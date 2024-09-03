@@ -1,5 +1,4 @@
 import re
-
 from PySide6.QtWidgets import QDialog, QMessageBox
 
 from database.fake_data import FakeData
@@ -12,7 +11,71 @@ from themes.inputs.text_input import TextInput
 from themes.labels.text_label import TextLabel
 
 
-# TODO: Separate functions from the UI
+class BackEnd:
+    @staticmethod
+    def evaluate_password_strength(plain_password: str) -> tuple:
+        """
+        Evaluates the strength of a password and returns a tuple with the strength message and color.
+        """
+        if plain_password != "":
+            if len(plain_password) < 6:
+                status = OPTIONS.WEAK
+                color = Settings.WARNING_COLOR
+
+            elif len(plain_password) >= 6 and (
+                    re.search("[a-zA-Z]", plain_password) and re.search("[0-9]", plain_password)):
+                if len(plain_password) >= 8 and re.search("[!@#$%^&*(),.?\":{}|<>]", plain_password):
+                    status = OPTIONS.STRONG
+                    color = Settings.SUCCESS_COLOR
+
+                else:
+                    status = OPTIONS.NORMAL
+                    color = Settings.INFO_COLOR
+
+            else:
+                status = OPTIONS.WEAK
+                color = Settings.WARNING_COLOR
+
+        else:
+            status = OPTIONS.EMPTY
+            color = Settings.DANGER_COLOR
+
+        return status, color
+
+    @staticmethod
+    def does_label_exist(label_name: str) -> bool:
+        """
+        Checks if the label already exists in the data.
+        """
+        label_name = label_name.strip().lower()
+
+        exist_flag = False
+        for data in FakeData.fake_data:
+            if label_name == data["label"]:
+                exist_flag = True
+
+        return exist_flag
+
+    @staticmethod
+    def submit_new_data(label_name: str, plain_password: str) -> tuple[bool, str]:
+        if label_name == "" or plain_password == "":
+            message = Messages.BOTH_LABEL_AND_PASSWORD_REQUIRED
+            return False, message
+
+        elif BackEnd.does_label_exist(label_name=label_name):
+            message = Messages.ALREADY_TAKEN_LABEL
+            return False, message
+
+        else:
+            encryption_utils = EncryptionUtils(master_password=Settings.MASTER_PASSWORD)
+            encrypted_password, nonce, tag = encryption_utils.encrypt_password(plain_password=plain_password)
+
+            print(encrypted_password, nonce, tag)
+
+            message = Messages.PASSWORD_SAVED
+            return True, message
+
+
 class AddPasswordDialog(QDialog):
     def __init__(self, parent=None):
         super().__init__(parent)
@@ -27,7 +90,7 @@ class AddPasswordDialog(QDialog):
             y=30,
             w=275,
             h=30,
-            on_text_change=lambda: self.does_label_exist(self.input_label.text()),
+            on_text_change=lambda: BackEnd.does_label_exist(self.input_label.text()),
             background_color=Settings.LIGHT_COLOR,
             color=Settings.DARK_COLOR,
             border_color=Settings.LIGHT_COLOR,
@@ -97,7 +160,7 @@ class AddPasswordDialog(QDialog):
         label_name = self.input_label.text()
 
         if label_name != "":
-            if self.does_label_exist(label_name):
+            if BackEnd.does_label_exist(label_name):
                 self.label_status.update_text(Messages.ALREADY_TAKEN_LABEL)
                 self.label_status.setStyleSheet(f"color: {Settings.DANGER_COLOR};")
             else:
@@ -114,56 +177,11 @@ class AddPasswordDialog(QDialog):
         password = self.input_password.text()
 
         # Determine password strength
-        strength, color = self.evaluate_password_strength(password)
+        strength, color = BackEnd.evaluate_password_strength(password)
 
         # Update the status label based on strength
         self.password_status.update_text(strength)
         self.password_status.setStyleSheet(f"color: {color};")
-
-    @staticmethod
-    def evaluate_password_strength(plain_password: str) -> tuple:
-        """
-        Evaluates the strength of a password and returns a tuple with the strength message and color.
-        """
-
-        if plain_password != "":
-            if len(plain_password) < 6:
-                status = OPTIONS.WEAK
-                color = Settings.WARNING_COLOR
-
-            elif len(plain_password) >= 6 and (
-                    re.search("[a-zA-Z]", plain_password) and re.search("[0-9]", plain_password)):
-                if len(plain_password) >= 8 and re.search("[!@#$%^&*(),.?\":{}|<>]", plain_password):
-                    status = OPTIONS.STRONG
-                    color = Settings.SUCCESS_COLOR
-
-                else:
-                    status = OPTIONS.NORMAL
-                    color = Settings.INFO_COLOR
-
-            else:
-                status = OPTIONS.WEAK
-                color = Settings.WARNING_COLOR
-
-        else:
-            status = OPTIONS.EMPTY
-            color = Settings.DANGER_COLOR
-
-        return status, color
-
-    @staticmethod
-    def does_label_exist(label_name: str) -> bool:
-        """
-        Checks if the label already exists in the data.
-        """
-        label_name = label_name.strip().lower()
-
-        exist_flag = False
-        for data in FakeData.fake_data:
-            if label_name == data["label"]:
-                exist_flag = True
-
-        return exist_flag
 
     def validate_and_save(self):
         """
@@ -172,7 +190,7 @@ class AddPasswordDialog(QDialog):
         label_name = self.input_label.text()
         plain_password = self.input_password.text()
 
-        is_valid, message = self.submit_new_data(label_name=label_name, plain_password=plain_password)
+        is_valid, message = BackEnd.submit_new_data(label_name=label_name, plain_password=plain_password)
 
         msg_box = QMessageBox(self)
         msg_box.setText(message)
@@ -187,24 +205,3 @@ class AddPasswordDialog(QDialog):
             msg_box.setWindowTitle(OPTIONS.ERROR)
 
         msg_box.exec()
-
-    def submit_new_data(self, label_name: str, plain_password: str) -> tuple[bool, str]:
-        if label_name == "" or plain_password == "":
-            message = Messages.BOTH_LABEL_AND_PASSWORD_REQUIRED
-
-            return False, message
-
-        elif self.does_label_exist(label_name=label_name):
-            message = Messages.ALREADY_TAKEN_LABEL
-
-            return False, message
-
-        else:
-            encryption_utils = EncryptionUtils(master_password=Settings.MASTER_PASSWORD)
-            encrypted_password, nonce, tag = encryption_utils.encrypt_password(plain_password=plain_password)
-
-            print(encrypted_password, nonce, tag)
-
-            message = Messages.PASSWORD_SAVED
-
-            return True, message
