@@ -8,7 +8,7 @@ class MESSAGES:
     EXPORT_DATA = "Export data"
     GENERATE = "Generate"
     PASSWORD_SAVED = "Your new password has been saved."
-    BOTH_LABEL_AND_PASSWORD_REQUIRED = "Both 'label' and 'password' fields are required."
+    BOTH_LABEL_AND_PASSWORD_REQUIRED = "Both 'Label' and 'Password' fields are required."
     SAVE = "Save"
     CONFIRM = "Confirm"
     KEYRING_USERNAME = "user_master_password"
