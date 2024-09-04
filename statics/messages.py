@@ -18,11 +18,14 @@ class MESSAGES:
 Remember if you reset your computer, you 
 should enter this password again.
 So keep it in a safe place."""
-
     LABEL = "Label"
     PASSWORD = "Password"
     CLOSE = "Close"
     PASSWORD_COPIED = "Password copied successfully."
+    MASTER_PASSWORD_NOT_THE_SAME = """Your current master password is not the same as the previous one.
+You do not have access to any of your previous passwords until you give me the previous master password."""
+    ERROR = "Error"
+    ERROR_HAPPENED = "An error occurred."
 
     @staticmethod
     def field_is_required(field):

@@ -1,6 +1,9 @@
 import sqlite3
 
+from cryptography.exceptions import InvalidTag
+
 from database.queries import Queries
+from statics.messages import MESSAGES
 
 
 class DatabaseUtilities:
@@ -57,31 +60,34 @@ class DatabaseUtilities:
 
     def retrieve_password(self, label):
         """Retrieve and decrypt a password from the database on demand."""
-        # Check the optional cache first
+        has_errors = False
+        error_message = ""
+        decrypted_password = None
+
+        # If we have the password in the cache, then there is no point of an extra query at all!
         if label in self.password_cache:
-            return self.password_cache[label]
+            decrypted_password = self.password_cache[label]
 
-        # Fetch from the database
-        conn = sqlite3.connect(self.db_name)
-        cursor = conn.cursor()
-        cursor.execute(Queries.retrieve_password, (label,))
-        row = cursor.fetchone()
-        conn.close()
+        else:
+            # Fetch from the database
+            conn = sqlite3.connect(self.db_name)
+            cursor = conn.cursor()
+            cursor.execute(Queries.retrieve_password, (label,))
+            row = cursor.fetchone()
+            conn.close()
 
-        if row:
-            encrypted_password, nonce, tag, salt = row  # Retrieve salt along with other parameters
+            encrypted_password, nonce, tag, salt = row
             try:
                 # Decrypt the password
                 decrypted_password = self.encryption_util.decrypt_password(encrypted_password, nonce, tag, salt)
-                # Optionally cache the result
                 self.password_cache[label] = decrypted_password
-                return decrypted_password
-            except Exception as e:
-                print(f"Decryption failed: {e}")
-                return None
-        else:
-            print(f"No password found for label '{label}'.")
-            return None
+
+            # This usually happens if the master password is not the same. So we rely on that :)
+            except InvalidTag:
+                has_errors = True
+                error_message = MESSAGES.MASTER_PASSWORD_NOT_THE_SAME
+
+        return has_errors, error_message, decrypted_password
 
     def update_password(self, label, new_plain_password):
         """Update an existing password in the database and clear the cache for the updated label."""

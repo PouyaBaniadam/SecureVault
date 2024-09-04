@@ -1,6 +1,6 @@
 from PySide6.QtCore import Qt, QRect, QEvent
 from PySide6.QtGui import QIcon, QPixmap
-from PySide6.QtWidgets import QMainWindow, QLabel, QListWidget, QListWidgetItem
+from PySide6.QtWidgets import QMainWindow, QLabel, QListWidget, QListWidgetItem, QMessageBox
 
 from generator.assets import Assets
 from screens.add_password import AddPasswordDialog
@@ -16,11 +16,11 @@ class SecureVault(QMainWindow):
     def __init__(self, database_utilities):
         super().__init__()
 
+        self.search_input = None
         self.database_utilities = database_utilities
 
         self.add_password = None
         self.search_button = None
-        self.search_input = None
         self.bg_label = None
         self.import_button = None
         self.export_button = None
@@ -163,14 +163,21 @@ class SecureVault(QMainWindow):
         Handles the click event on a result item.
         """
         label_text = item.text()
-        decrypted_password = self.database_utilities.retrieve_password(label_text)
+        has_errors, error_message, decrypted_password = self.database_utilities.retrieve_password(label_text)
 
-        if decrypted_password:
+        if has_errors:
+            error_dialog = QMessageBox(self)
+            error_dialog.setIcon(QMessageBox.Critical)
+
+            error_dialog.setWindowTitle(MESSAGES.ERROR)
+            error_dialog.setText(MESSAGES.ERROR_HAPPENED)
+            error_dialog.setInformativeText(error_message)
+            error_dialog.exec()
+
+        else:
+            # Show the password details dialog
             dialog = PasswordDetailsDialog(label_text, decrypted_password, self)
             dialog.exec()
-
-        # Hide the results list after selecting an item
-        self.results_list.hide()
 
     def eventFilter(self, obj, event):
         """

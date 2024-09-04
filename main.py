@@ -20,25 +20,22 @@ if __name__ == "__main__":
     font_family = QFontDatabase.applicationFontFamilies(font_id)[0]
     app.setFont(QFont(font_family))
 
-    # Check if there is already a stored master password
+    # Master password loader
     master_password = PasswordUtilities.get_master_password()
+
+    # Initializations
+    encryption_util = EncryptionUtils(master_password=master_password)
+    database_utilities = DatabaseUtilities(db_name=SETTINGS.DB_NAME, encryption_util=encryption_util)
 
     if master_password is None:
         # Show setup page if no password is found
-        setup_page = SetupMasterPasswordPage()
+        setup_page = SetupMasterPasswordPage(database_utilities=database_utilities)
         setup_page.show()
+
     else:
-        # Initialize Encryption Utilities with the stored master password
-        encryption_util = EncryptionUtils(master_password=master_password)
+        database_utilities._load_all_labels()
 
-        # Initialize Password Manager with the database name and encryption utilities
-        database_utilities = DatabaseUtilities(db_name=SETTINGS.DB_NAME, encryption_util=encryption_util)
-
-        # Load all labels into memory at the beginning
-        database_utilities._load_all_labels()  # Load labels at the start
-
-        # Show the main application window
-        window = SecureVault(database_utilities)
+        window = SecureVault(database_utilities=database_utilities)
         window.show()
 
     sys.exit(app.exec())

@@ -1,23 +1,23 @@
-import keyring
 from PySide6.QtGui import QIcon
 from PySide6.QtWidgets import QMainWindow, QMessageBox
 
 from generator.assets import Assets
+from password.utilities import PasswordUtilities
 from screens.main import SecureVault
 from statics.messages import MESSAGES
 from statics.settings import SETTINGS
 from themes.buttons.text_icon_button import TextIconButton
 from themes.inputs.text_input import TextInput
 from themes.labels.text_label import TextLabel
-from password.utilities import PasswordUtilities
 
 
 class SetupMasterPasswordPage(QMainWindow):
-    def __init__(self):
+    def __init__(self, database_utilities):
         super().__init__()
 
         self.main_window = None
         self.setWindowTitle(MESSAGES.SETUP_MASTER_PASSWORD)
+        self.database_utilities = database_utilities
 
         self.setFixedSize(400, 250)
 
@@ -105,7 +105,7 @@ class SetupMasterPasswordPage(QMainWindow):
             PasswordUtilities.save_master_password(master_password=master_password)
             self.close()
 
-            self.main_window = SecureVault()
+            self.main_window = SecureVault(database_utilities=self.database_utilities)
             self.main_window.show()
 
         else:
