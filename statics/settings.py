@@ -18,6 +18,7 @@ class SETTINGS:
     ICON_SIZE = 50
     BUTTON_BORDER_RADIUS = 10
     BUTTON_HEIGHT = 30
+    SHADOW_OFFSET = 5
 
     # Password
     GENERIC_PASSWORD_ALLOWED_CHARACTERS = string.ascii_letters + string.digits + string.punctuation

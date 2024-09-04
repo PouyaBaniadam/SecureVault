@@ -1,13 +1,14 @@
-from PySide6.QtWidgets import QPushButton
+from PySide6.QtWidgets import QPushButton, QGraphicsDropShadowEffect
 from PySide6.QtGui import QIcon
 from PySide6.QtCore import Qt, QSize
 
+from statics.settings import SETTINGS
 from themes.ui_utilities import UIUtilities
 
 
 class TextIconButton(QPushButton, UIUtilities):
     """
-    This class is for showing a button with both icon and a text on it.
+    This class is for showing a button with both icon and text on it.
     """
     def __init__(self, parent=None, text="", icon_path="", x=0, y=0, w=0, h=0, on_click=None, **kwargs):
         super().__init__(text, parent)
@@ -37,9 +38,14 @@ class TextIconButton(QPushButton, UIUtilities):
         )
 
         self.setFixedSize(w, h)
-
         self.setGeometry(x, y, w, h)
-
         self.setCursor(Qt.PointingHandCursor)
+
+        shadow = QGraphicsDropShadowEffect(self)
+        shadow.setBlurRadius(SETTINGS.BUTTON_BORDER_RADIUS)
+        shadow.setOffset(SETTINGS.SHADOW_OFFSET, SETTINGS.SHADOW_OFFSET)
+        shadow.setColor(SETTINGS.DARK_COLOR)
+
+        self.setGraphicsEffect(shadow)
 
         self.clicked.connect(on_click)
