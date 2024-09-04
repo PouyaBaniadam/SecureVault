@@ -102,11 +102,12 @@ class SetupMasterPasswordPage(QMainWindow):
 
     def save_password(self, master_password: str) -> None:
         if master_password:
-            keyring.set_password(MESSAGES.APP_NAME, MESSAGES.KEYRING_USERNAME, master_password)
+            PasswordUtilities.save_master_password(master_password=master_password)
             self.close()
 
             self.main_window = SecureVault()
             self.main_window.show()
+
         else:
             self.show_error_dialog(MESSAGES.field_is_required("Password"))
 

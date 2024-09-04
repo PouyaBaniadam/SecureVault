@@ -130,3 +130,7 @@ class PasswordUtilities:
     @staticmethod
     def get_master_password():
         return keyring.get_password(MESSAGES.APP_NAME, MESSAGES.KEYRING_USERNAME)
+
+    @staticmethod
+    def save_master_password(master_password: str):
+        keyring.set_password(MESSAGES.APP_NAME, MESSAGES.KEYRING_USERNAME, master_password)
