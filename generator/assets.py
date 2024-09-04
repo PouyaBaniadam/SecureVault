@@ -21,5 +21,6 @@ class Assets:
 		cls.padlock_png = cls.resource_path("padlock.png")
 		cls.search_password_png = cls.resource_path("search_password.png")
 		cls.ubuntu_ttf = cls.resource_path("ubuntu.ttf")
+		cls.verified_png = cls.resource_path("verified.png")
 
 Assets.initialize_paths()

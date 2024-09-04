@@ -1,20 +1,20 @@
 from PySide6.QtWidgets import QDialog, QMessageBox
 
 from generator.assets import Assets
-from statics.messages import Messages
+from statics.messages import MESSAGES
 from statics.options import OPTIONS
 from statics.settings import Settings
 from themes.buttons.text_button import TextButton
 from themes.buttons.text_icon_button import TextIconButton
 from themes.inputs.text_input import TextInput
 from themes.labels.text_label import TextLabel
-from utilities.add_password import AddPasswordUtilities
+from password.utilities import PasswordUtilities
 
 
 class AddPasswordDialog(QDialog):
     def __init__(self, parent=None):
         super().__init__(parent)
-        self.setWindowTitle(Messages.ADD_PASSWORD)
+        self.setWindowTitle(MESSAGES.ADD_PASSWORD)
         self.setFixedSize(400, 250)
 
         # Label of Input field for label
@@ -30,12 +30,12 @@ class AddPasswordDialog(QDialog):
         # Input field for label
         self.input_label = TextInput(
             parent=self,
-            placeholder_text=Messages.enter_field(field="label"),
+            placeholder_text=MESSAGES.enter_field(field="label"),
             x=10,
             y=30,
             w=380,
             h=30,
-            on_text_change=lambda: AddPasswordUtilities.does_label_exist(self.input_label.text()),
+            on_text_change=lambda: PasswordUtilities.does_label_exist(self.input_label.text()),
             background_color=Settings.LIGHT_COLOR,
             color=Settings.DARK_COLOR,
             border_color=Settings.LIGHT_COLOR,
@@ -69,7 +69,7 @@ class AddPasswordDialog(QDialog):
         # Input field for password
         self.input_password = TextInput(
             parent=self,
-            placeholder_text=Messages.enter_field(field="password"),
+            placeholder_text=MESSAGES.enter_field(field="password"),
             x=10,
             y=115,
             w=260,
@@ -84,7 +84,7 @@ class AddPasswordDialog(QDialog):
 
         self.generate_password_button = TextIconButton(
             parent=self,
-            text=Messages.GENERATE,
+            text=MESSAGES.GENERATE,
             icon_path=Assets.generate_password_png,
             on_click=self.generate_password,
             x=275,
@@ -111,7 +111,7 @@ class AddPasswordDialog(QDialog):
         # Save button
         self.save_button = TextButton(
             parent=self,
-            text=Messages.SAVE,
+            text=MESSAGES.SAVE,
             x=100,
             y=200,
             w=200,
@@ -129,14 +129,14 @@ class AddPasswordDialog(QDialog):
         label_name = self.input_label.text()
 
         if label_name != "":
-            if AddPasswordUtilities.does_label_exist(label_name):
-                self.label_status.update_text(Messages.ALREADY_TAKEN_LABEL)
+            if PasswordUtilities.does_label_exist(label_name):
+                self.label_status.update_text(MESSAGES.ALREADY_TAKEN_LABEL)
                 self.label_status.setStyleSheet(f"color: {Settings.DANGER_COLOR};")
             else:
-                self.label_status.update_text(Messages.VALID_LABEL)
+                self.label_status.update_text(MESSAGES.VALID_LABEL)
                 self.label_status.setStyleSheet(f"color: {Settings.SUCCESS_COLOR};")
         else:
-            self.label_status.update_text(Messages.field_is_required(field="Label"))
+            self.label_status.update_text(MESSAGES.field_is_required(field="Label"))
             self.label_status.setStyleSheet(f"color: {Settings.DANGER_COLOR};")
 
     def on_input_password_changed(self):
@@ -146,7 +146,7 @@ class AddPasswordDialog(QDialog):
         password = self.input_password.text()
 
         # Determine password strength
-        strength, color = AddPasswordUtilities.evaluate_password_strength(password)
+        strength, color = PasswordUtilities.evaluate_password_strength(password)
 
         # Update the status label based on strength
         self.password_status.update_text(strength)
@@ -159,7 +159,7 @@ class AddPasswordDialog(QDialog):
         label_name = self.input_label.text()
         plain_password = self.input_password.text()
 
-        is_valid, message = AddPasswordUtilities.submit_new_data(label_name=label_name, plain_password=plain_password)
+        is_valid, message = PasswordUtilities.submit_new_data(label_name=label_name, plain_password=plain_password)
 
         msg_box = QMessageBox(self)
         msg_box.setText(message)
@@ -177,7 +177,7 @@ class AddPasswordDialog(QDialog):
 
     def generate_password(self):
         # Generate a random password
-        generated_password = AddPasswordUtilities.generate_random_code(
+        generated_password = PasswordUtilities.generate_random_code(
             Settings.MAX_PASSWORD_LENGTH,
             Settings.GENERIC_PASSWORD_ALLOWED_CHARACTERS,
         )

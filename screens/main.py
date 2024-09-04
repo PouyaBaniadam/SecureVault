@@ -2,7 +2,7 @@ from PySide6.QtGui import QIcon, QPixmap
 from PySide6.QtWidgets import QMainWindow, QLabel
 
 from generator.assets import Assets
-from statics.messages import Messages
+from statics.messages import MESSAGES
 from screens.add_password import AddPasswordDialog
 from statics.settings import Settings
 from themes.buttons.icon_button import IconButton
@@ -20,7 +20,7 @@ class SecureVault(QMainWindow):
         self.bg_label = None
         self.import_button = None
         self.export_button = None
-        self.setWindowTitle(Messages.APP_NAME)
+        self.setWindowTitle(MESSAGES.APP_NAME)
         self.setFixedSize(400, 500)
 
         self.setWindowIcon(QIcon(Assets.lock_png))
@@ -38,7 +38,7 @@ class SecureVault(QMainWindow):
     def load_base_widgets(self):
         self.search_input = TextInput(
             parent=self,
-            placeholder_text=Messages.SEARCH_LABEL,
+            placeholder_text=MESSAGES.SEARCH_LABEL,
             x=30,
             y=70,
             w=300,
@@ -74,7 +74,7 @@ class SecureVault(QMainWindow):
 
         self.import_button = TextIconButton(
             parent=self,
-            text=Messages.IMPORT_DATA,
+            text=MESSAGES.IMPORT_DATA,
             icon_path=Assets.import_png,
             x=15,
             y=450,
@@ -87,7 +87,7 @@ class SecureVault(QMainWindow):
 
         self.export_button = TextIconButton(
             parent=self,
-            text=Messages.EXPORT_DATA,
+            text=MESSAGES.EXPORT_DATA,
             icon_path=Assets.export_png,
             x=245,
             y=450,

@@ -2,14 +2,17 @@ import random
 import re
 import string
 
+import keyring
+import pyperclip
+
 from database.fake_data import FakeData
-from encyption.encryption_utils import EncryptionUtils
-from statics.messages import Messages
+from encyption.utilities import EncryptionUtils
+from statics.messages import MESSAGES
 from statics.options import OPTIONS
 from statics.settings import Settings
 
 
-class AddPasswordUtilities:
+class PasswordUtilities:
     @staticmethod
     def evaluate_password_strength(plain_password: str) -> tuple:
         """
@@ -35,7 +38,7 @@ class AddPasswordUtilities:
                 color = Settings.WARNING_COLOR
 
         else:
-            status = Messages.field_is_required(field="Password")
+            status = MESSAGES.field_is_required(field="Password")
             color = Settings.DANGER_COLOR
 
         return status, color
@@ -57,11 +60,11 @@ class AddPasswordUtilities:
     @staticmethod
     def submit_new_data(label_name: str, plain_password: str) -> tuple[bool, str]:
         if label_name == "" or plain_password == "":
-            message = Messages.BOTH_LABEL_AND_PASSWORD_REQUIRED
+            message = MESSAGES.BOTH_LABEL_AND_PASSWORD_REQUIRED
             return False, message
 
-        elif AddPasswordUtilities.does_label_exist(label_name=label_name):
-            message = Messages.ALREADY_TAKEN_LABEL
+        elif PasswordUtilities.does_label_exist(label_name=label_name):
+            message = MESSAGES.ALREADY_TAKEN_LABEL
             return False, message
 
         else:
@@ -70,7 +73,7 @@ class AddPasswordUtilities:
 
             print(encrypted_password, nonce, tag)
 
-            message = Messages.PASSWORD_SAVED
+            message = MESSAGES.PASSWORD_SAVED
             return True, message
 
     @staticmethod
@@ -115,4 +118,15 @@ class AddPasswordUtilities:
         # Convert list to a string and return
         code = "".join(password_chars)
 
+        # Copy the generated code into clipboard
+        pyperclip.copy(text=code)
+
         return code
+
+    @staticmethod
+    def delete_master_password():
+        keyring.delete_password(MESSAGES.APP_NAME, MESSAGES.KEYRING_USERNAME)
+
+    @staticmethod
+    def get_master_password():
+        return keyring.get_password(MESSAGES.APP_NAME, MESSAGES.KEYRING_USERNAME)
