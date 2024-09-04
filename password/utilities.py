@@ -116,7 +116,7 @@ class PasswordUtilities:
     @staticmethod
     def get_master_password():
         """Retrieves the master password from the keyring."""
-        return keyring.get_password(MESSAGES.APP_NAME, MESSAGES.KEYRING_USERNAME)
+        return keyring.get_password(MESSAGES.APP_NAME, MESSAGES.KEYRING_USERNAME) or ""
 
     @staticmethod
     def save_master_password(master_password: str):

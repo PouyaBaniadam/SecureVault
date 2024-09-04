@@ -24,11 +24,11 @@ if __name__ == "__main__":
     master_password = PasswordUtilities.get_master_password()
 
     # Initializations
-    encryption_util = EncryptionUtils(master_password=master_password)
-    database_utilities = DatabaseUtilities(db_name=SETTINGS.DB_NAME, encryption_util=encryption_util)
+    encryption_utilities = EncryptionUtils(master_password=master_password)
+    database_utilities = DatabaseUtilities(db_name=SETTINGS.DB_NAME, encryption_utilities=encryption_utilities)
 
-    if master_password is None:
-        # Show setup page if no password is found
+    # Page loading
+    if master_password == "":
         setup_page = SetupMasterPasswordPage(database_utilities=database_utilities)
         setup_page.show()
 

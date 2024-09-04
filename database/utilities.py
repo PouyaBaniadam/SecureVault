@@ -7,12 +7,12 @@ from statics.messages import MESSAGES
 
 
 class DatabaseUtilities:
-    def __init__(self, db_name, encryption_util):
+    def __init__(self, db_name, encryption_utilities):
         """
         Initialize the PasswordManager class with a database name and an encryption utility instance.
         """
         self.db_name = db_name
-        self.encryption_util = encryption_util
+        self.encryption_util = encryption_utilities
         self.labels_cache = []  # List to cache labels
         self.password_cache = {}  # Optional: Dictionary to cache recently accessed passwords
         self._initialize_database()

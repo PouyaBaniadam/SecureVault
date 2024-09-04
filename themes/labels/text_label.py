@@ -8,10 +8,13 @@ class TextLabel(QLabel, UIUtilities):
     This class is for showing a label with text on it.
     """
 
-    def __init__(self, parent=None, text="", x=0, y=0, w=0, h=0, **kwargs):
+    def __init__(self, parent=None, text="", x=0, y=0, w=0, h=0, word_wrap=False, **kwargs):
         super().__init__(text, parent)
 
+        self.word_wrap = word_wrap  # Store word wrap setting
         self.load_QLabelStyle(**kwargs)
+
+        self.setWordWrap(self.word_wrap)  # Enable or disable word wrapping
 
         self.setStyleSheet(
             f"""
@@ -28,3 +31,7 @@ class TextLabel(QLabel, UIUtilities):
 
     def update_text(self, text):
         self.setText(text)
+
+    def setWordWrap(self, enable):
+        """Enable or disable word wrapping for the label."""
+        super().setWordWrap(enable)

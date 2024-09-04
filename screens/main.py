@@ -3,7 +3,9 @@ from PySide6.QtGui import QIcon, QPixmap
 from PySide6.QtWidgets import QMainWindow, QLabel, QListWidget, QListWidgetItem, QMessageBox
 
 from generator.assets import Assets
+from password.utilities import PasswordUtilities
 from screens.add_password import AddPasswordDialog
+from screens.master_password_dialog import MasterPasswordDialog
 from screens.password_detail import PasswordDetailsDialog
 from statics.messages import MESSAGES
 from statics.settings import SETTINGS
@@ -16,6 +18,7 @@ class SecureVault(QMainWindow):
     def __init__(self, database_utilities):
         super().__init__()
 
+        self.master_password_button = None
         self.search_input = None
         self.database_utilities = database_utilities
 
@@ -109,6 +112,20 @@ class SecureVault(QMainWindow):
             color=SETTINGS.LIGHT_COLOR,
         )
 
+        self.master_password_button = TextIconButton(
+            parent=self,
+            icon_path=Assets.lock_png,
+            text=MESSAGES.UPDATE_MASTER_PASSWORD,
+            x=85,
+            y=380,
+            w=225,
+            h=SETTINGS.BUTTON_HEIGHT,
+            on_click=self.show_master_password_dialog,
+            border_radius=SETTINGS.BUTTON_BORDER_RADIUS,
+            background_color=SETTINGS.PRIMARY_COLOR,
+            color=SETTINGS.LIGHT_COLOR,
+        )
+
     def create_search_results_widget(self):
         # Create a QListWidget for search results
         self.results_list = QListWidget(self)
@@ -191,4 +208,8 @@ class SecureVault(QMainWindow):
 
     def show_add_password_dialog(self):
         dialog = AddPasswordDialog(self)
+        dialog.exec()
+
+    def show_master_password_dialog(self):
+        dialog = MasterPasswordDialog(self)
         dialog.exec()

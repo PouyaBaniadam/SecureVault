@@ -56,7 +56,7 @@ class SetupMasterPasswordPage(QMainWindow):
             x=275,
             y=150,
             w=120,
-            h=30,
+            h=SETTINGS.BUTTON_HEIGHT,
             border_radius=SETTINGS.BUTTON_BORDER_RADIUS,
             background_color=SETTINGS.PRIMARY_COLOR,
             color=SETTINGS.LIGHT_COLOR,
@@ -79,7 +79,7 @@ class SetupMasterPasswordPage(QMainWindow):
             x=130,
             y=210,
             w=120,
-            h=30,
+            h=SETTINGS.BUTTON_HEIGHT,
             border_radius=SETTINGS.BUTTON_BORDER_RADIUS,
             background_color=SETTINGS.PRIMARY_COLOR,
             color=SETTINGS.LIGHT_COLOR,
@@ -118,7 +118,6 @@ class SetupMasterPasswordPage(QMainWindow):
         QMessageBox.critical(self, "Error", message)
 
     def generate_password(self):
-        # Generate a random password
         generated_password = PasswordUtilities.generate_random_code(
             SETTINGS.MAX_PASSWORD_LENGTH,
             SETTINGS.GENERIC_PASSWORD_ALLOWED_CHARACTERS,

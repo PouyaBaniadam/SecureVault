@@ -13,11 +13,19 @@ class MESSAGES:
     CONFIRM = "Confirm"
     KEYRING_USERNAME = "user_master_password"
     SETUP_MASTER_PASSWORD = "Setup Master Password"
+    UPDATE_MASTER_PASSWORD = "Update Master Password"
+    CURRENT_MASTER_PASSWORD = "Current Master Password"
+    NEW_MASTER_PASSWORD = "New master password"
+    ENTER_CURRENT_PASSWORD = "Enter current password"
+    ENTER_NEW_PASSWORD = "Enter new password"
+    CONFIRM_NEW_PASSWORD = "Confirm new password"
+    RE_ENTER_NEW_PASSWORD = "Re-enter new password"
     SETUP_MASTER_INFO = """Enter a strong master password for the first time
 
-Remember if you reset your computer, you 
-should enter this password again.
-So keep it in a safe place."""
+Remember if you reset your computer or
+make any unusual changes, you should 
+enter this password again. otherwise 
+all your passwords are gonna be lost."""
     LABEL = "Label"
     PASSWORD = "Password"
     CLOSE = "Close"
@@ -26,6 +34,8 @@ So keep it in a safe place."""
 You do not have access to any of your previous passwords until you give me the previous master password."""
     ERROR = "Error"
     ERROR_HAPPENED = "An error occurred."
+    SUBMIT = "Submit"
+    CANCEL = "Cancel"
 
     @staticmethod
     def field_is_required(field):
