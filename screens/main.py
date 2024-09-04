@@ -4,15 +4,17 @@ from PySide6.QtWidgets import QMainWindow, QLabel
 from generator.assets import Assets
 from statics.messages import MESSAGES
 from screens.add_password import AddPasswordDialog
-from statics.settings import Settings
+from statics.settings import SETTINGS
 from themes.buttons.icon_button import IconButton
 from themes.buttons.text_icon_button import TextIconButton
 from themes.inputs.text_input import TextInput
 
 
 class SecureVault(QMainWindow):
-    def __init__(self):
+    def __init__(self, database_utilities):
         super().__init__()
+
+        self.database_utilities = database_utilities
 
         self.add_password = None
         self.search_button = None
@@ -20,13 +22,12 @@ class SecureVault(QMainWindow):
         self.bg_label = None
         self.import_button = None
         self.export_button = None
+
         self.setWindowTitle(MESSAGES.APP_NAME)
         self.setFixedSize(400, 500)
-
         self.setWindowIcon(QIcon(Assets.lock_png))
 
         self.set_background_image()
-
         self.load_base_widgets()
 
     def set_background_image(self):
@@ -43,12 +44,12 @@ class SecureVault(QMainWindow):
             y=70,
             w=300,
             h=30,
-            background_color=Settings.LIGHT_COLOR,
-            color=Settings.DARK_COLOR,
-            border_color=Settings.LIGHT_COLOR,
-            border_radius=Settings.BUTTON_BORDER_RADIUS,
+            background_color=SETTINGS.LIGHT_COLOR,
+            color=SETTINGS.DARK_COLOR,
+            border_color=SETTINGS.LIGHT_COLOR,
+            border_radius=SETTINGS.BUTTON_BORDER_RADIUS,
             padding=5,
-            selection_background_color=Settings.PRIMARY_COLOR
+            selection_background_color=SETTINGS.PRIMARY_COLOR
         )
 
         self.search_button = IconButton(
@@ -56,10 +57,10 @@ class SecureVault(QMainWindow):
             icon_path=Assets.search_password_png,
             x=330,
             y=60,
-            w=Settings.ICON_SIZE,
-            h=Settings.ICON_SIZE,
-            background_color=Settings.PRIMARY_COLOR,
-            color=Settings.DARK_COLOR,
+            w=SETTINGS.ICON_SIZE,
+            h=SETTINGS.ICON_SIZE,
+            background_color=SETTINGS.PRIMARY_COLOR,
+            color=SETTINGS.DARK_COLOR,
         )
 
         self.add_password = IconButton(
@@ -67,8 +68,8 @@ class SecureVault(QMainWindow):
             icon_path=Assets.padlock_png,
             x=175,
             y=440,
-            w=Settings.ICON_SIZE,
-            h=Settings.ICON_SIZE,
+            w=SETTINGS.ICON_SIZE,
+            h=SETTINGS.ICON_SIZE,
             on_click=self.show_add_password_dialog,  # Connect button click to show the dialog
         )
 
@@ -79,10 +80,10 @@ class SecureVault(QMainWindow):
             x=15,
             y=450,
             w=140,
-            h=Settings.BUTTON_HEIGHT,
-            border_radius=Settings.BUTTON_BORDER_RADIUS,
-            background_color=Settings.PRIMARY_COLOR,
-            color=Settings.LIGHT_COLOR,
+            h=SETTINGS.BUTTON_HEIGHT,
+            border_radius=SETTINGS.BUTTON_BORDER_RADIUS,
+            background_color=SETTINGS.PRIMARY_COLOR,
+            color=SETTINGS.LIGHT_COLOR,
         )
 
         self.export_button = TextIconButton(
@@ -92,10 +93,10 @@ class SecureVault(QMainWindow):
             x=245,
             y=450,
             w=140,
-            h=Settings.BUTTON_HEIGHT,
-            border_radius=Settings.BUTTON_BORDER_RADIUS,
-            background_color=Settings.PRIMARY_COLOR,
-            color=Settings.LIGHT_COLOR,
+            h=SETTINGS.BUTTON_HEIGHT,
+            border_radius=SETTINGS.BUTTON_BORDER_RADIUS,
+            background_color=SETTINGS.PRIMARY_COLOR,
+            color=SETTINGS.LIGHT_COLOR,
         )
 
     def show_add_password_dialog(self):

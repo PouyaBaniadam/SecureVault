@@ -5,7 +5,7 @@ from PySide6.QtWidgets import QMainWindow, QMessageBox
 from generator.assets import Assets
 from screens.main import SecureVault
 from statics.messages import MESSAGES
-from statics.settings import Settings
+from statics.settings import SETTINGS
 from themes.buttons.text_icon_button import TextIconButton
 from themes.inputs.text_input import TextInput
 from themes.labels.text_label import TextLabel
@@ -40,12 +40,12 @@ class SetupMasterPasswordPage(QMainWindow):
             y=150,
             w=260,
             h=30,
-            background_color=Settings.LIGHT_COLOR,
-            color=Settings.DARK_COLOR,
-            border_color=Settings.LIGHT_COLOR,
-            border_radius=Settings.BUTTON_BORDER_RADIUS,
+            background_color=SETTINGS.LIGHT_COLOR,
+            color=SETTINGS.DARK_COLOR,
+            border_color=SETTINGS.LIGHT_COLOR,
+            border_radius=SETTINGS.BUTTON_BORDER_RADIUS,
             padding=5,
-            selection_background_color=Settings.PRIMARY_COLOR
+            selection_background_color=SETTINGS.PRIMARY_COLOR
         )
 
         self.generate_password_button = TextIconButton(
@@ -57,9 +57,9 @@ class SetupMasterPasswordPage(QMainWindow):
             y=150,
             w=120,
             h=30,
-            border_radius=Settings.BUTTON_BORDER_RADIUS,
-            background_color=Settings.PRIMARY_COLOR,
-            color=Settings.LIGHT_COLOR,
+            border_radius=SETTINGS.BUTTON_BORDER_RADIUS,
+            background_color=SETTINGS.PRIMARY_COLOR,
+            color=SETTINGS.LIGHT_COLOR,
         )
 
         self.password_status = TextLabel(
@@ -80,9 +80,9 @@ class SetupMasterPasswordPage(QMainWindow):
             y=210,
             w=120,
             h=30,
-            border_radius=Settings.BUTTON_BORDER_RADIUS,
-            background_color=Settings.PRIMARY_COLOR,
-            color=Settings.LIGHT_COLOR,
+            border_radius=SETTINGS.BUTTON_BORDER_RADIUS,
+            background_color=SETTINGS.PRIMARY_COLOR,
+            color=SETTINGS.LIGHT_COLOR,
         )
 
         self.input_password.textChanged.connect(self.on_input_password_changed)
@@ -120,8 +120,8 @@ class SetupMasterPasswordPage(QMainWindow):
     def generate_password(self):
         # Generate a random password
         generated_password = PasswordUtilities.generate_random_code(
-            Settings.MAX_PASSWORD_LENGTH,
-            Settings.GENERIC_PASSWORD_ALLOWED_CHARACTERS,
+            SETTINGS.MAX_PASSWORD_LENGTH,
+            SETTINGS.GENERIC_PASSWORD_ALLOWED_CHARACTERS,
         )
 
         self.input_password.setText(generated_password)

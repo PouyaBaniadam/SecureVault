@@ -1,18 +1,23 @@
 class Queries:
     create_password_table = """CREATE TABLE IF NOT EXISTS passwords (
-    id INTEGER PRIMARY KEY AUTOINCREMENT,
-    label TEXT NOT NULL,
-    encrypted_password BLOB NOT NULL,
-    nonce BLOB NOT NULL,
-    tag BLOB NOT NULL,
-    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
-);
+                            id INTEGER PRIMARY KEY,
+                            label TEXT NOT NULL UNIQUE,
+                            encrypted_password BLOB NOT NULL,
+                            nonce BLOB NOT NULL,
+                            tag BLOB NOT NULL
+                          )
 """
 
-    does_table_exist = """SELECT name FROM sqlite_master WHERE type='table' AND name=?;"""
-
-    read_all_data_from_passwords = """select * from passwords;"""
-
-    insert_new_data = """INSERT INTO passwords (label, encrypted_password, nonce, tag)
-        VALUES (?, ?, ?, ?);
+    add_password = """INSERT INTO passwords (label, encrypted_password, nonce, tag) 
+                              VALUES (?, ?, ?, ?)
 """
+
+    retrieve_password = """SELECT encrypted_password, nonce, tag FROM passwords WHERE label = ?"""
+
+    update_password = """UPDATE passwords SET encrypted_password = ?, nonce = ?, tag = ? WHERE label = ?"""
+
+    delete_password = """DELETE FROM passwords WHERE label = ?"""
+
+    list_passwords = """SELECT label FROM passwords"""
+
+    load_labels = """SELECT label FROM passwords"""

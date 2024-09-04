@@ -1,7 +1,7 @@
 import string
 
 
-class Settings:
+class SETTINGS:
     # Data base
     DB_NAME = "password_manager.db"
 

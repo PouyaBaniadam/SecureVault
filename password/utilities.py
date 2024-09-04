@@ -5,96 +5,87 @@ import string
 import keyring
 import pyperclip
 
-from database.fake_data import FakeData
+from database.utilities import DatabaseUtilities
 from encyption.utilities import EncryptionUtils
 from statics.messages import MESSAGES
 from statics.options import OPTIONS
-from statics.settings import Settings
+from statics.settings import SETTINGS
 
 
 class PasswordUtilities:
+    def __init__(self, db_name=SETTINGS.DB_NAME):
+        """
+        Initialize the PasswordUtilities class with database and encryption utilities.
+        """
+        # Get master password from keyring or some secure storage
+        self.master_password = self.get_master_password()
+
+        # Initialize encryption utilities with the master password
+        self.encryption_util = EncryptionUtils(master_password=self.master_password)
+
+        # Initialize password manager
+        self.password_manager = DatabaseUtilities(db_name, self.encryption_util)
+
     @staticmethod
     def evaluate_password_strength(plain_password: str) -> tuple:
-        """
-        Evaluates the strength of a password and returns a tuple with the strength message and color.
-        """
+        """Evaluates the strength of a password and returns a tuple with the strength message and color."""
         if plain_password != "":
-            if len(plain_password) < Settings.MIN_PASSWORD_LENGTH:
+            if len(plain_password) < SETTINGS.MIN_PASSWORD_LENGTH:
                 status = OPTIONS.WEAK
-                color = Settings.WARNING_COLOR
+                color = SETTINGS.WARNING_COLOR
 
-            elif len(plain_password) >= Settings.MIN_PASSWORD_LENGTH and (
+            elif len(plain_password) >= SETTINGS.MIN_PASSWORD_LENGTH and (
                     re.search("[a-zA-Z]", plain_password) and re.search("[0-9]", plain_password)):
                 if len(plain_password) >= 8 and re.search("[!@#$%^&*(),.?\":{}|<>]", plain_password):
                     status = OPTIONS.STRONG
-                    color = Settings.SUCCESS_COLOR
+                    color = SETTINGS.SUCCESS_COLOR
 
                 else:
                     status = OPTIONS.NORMAL
-                    color = Settings.INFO_COLOR
+                    color = SETTINGS.INFO_COLOR
 
             else:
                 status = OPTIONS.WEAK
-                color = Settings.WARNING_COLOR
+                color = SETTINGS.WARNING_COLOR
 
         else:
             status = MESSAGES.field_is_required(field="Password")
-            color = Settings.DANGER_COLOR
+            color = SETTINGS.DANGER_COLOR
 
         return status, color
 
-    @staticmethod
-    def does_label_exist(label_name: str) -> bool:
-        """
-        Checks if the label already exists in the data.
-        """
+    def does_label_exist(self, label_name: str) -> bool:
+        """Checks if the label already exists in the database."""
         label_name = label_name.strip().lower()
+        labels = self.password_manager.list_labels()
+        return label_name in labels
 
-        exist_flag = False
-        for data in FakeData.fake_data:
-            if label_name == data["label"]:
-                exist_flag = True
-
-        return exist_flag
-
-    @staticmethod
-    def submit_new_data(label_name: str, plain_password: str) -> tuple[bool, str]:
+    def submit_new_data(self, label_name: str, plain_password: str) -> tuple[bool, str]:
+        """Encrypts and saves a new password to the database."""
         if label_name == "" or plain_password == "":
             message = MESSAGES.BOTH_LABEL_AND_PASSWORD_REQUIRED
             return False, message
 
-        elif PasswordUtilities.does_label_exist(label_name=label_name):
+        elif self.does_label_exist(label_name=label_name):
             message = MESSAGES.ALREADY_TAKEN_LABEL
             return False, message
 
         else:
-            encryption_utils = EncryptionUtils(master_password=Settings.MASTER_PASSWORD)
-            encrypted_password, nonce, tag = encryption_utils.encrypt_password(plain_password=plain_password)
-
-            print(encrypted_password, nonce, tag)
-
+            # Save encrypted password to the database
+            self.password_manager.add_password(label_name, plain_password)
             message = MESSAGES.PASSWORD_SAVED
             return True, message
 
     @staticmethod
-    def generate_random_code(code_length: int = Settings.MIN_PASSWORD_LENGTH, *allowed_characters: str) -> str:
-        """
-        This function generates a random string of characters.
-        By default, it generates 8 random digits. But if you prefer more, just give it the arguments!
-
-        optional param code_length: The length of the generated code
-        :optional param allowed_characters: A tuple of strings that defines which characters are allowed
-        :return: A randomly generated string with at least one letter, one number, and one punctuation
-        """
-
-        # Combine all allowed characters into a single string
+    def generate_random_code(code_length: int = SETTINGS.MIN_PASSWORD_LENGTH, *allowed_characters: str) -> str:
+        """Generates a random string of characters with at least one letter, one number, and one punctuation."""
         allowed_characters: str = "".join(allowed_characters)
 
-        # If no allowed characters are specified, use default allowed characters (digits)
+        # Use default allowed characters if none are specified
         if len(allowed_characters) == 0:
             allowed_characters = string.digits
 
-        # Ensure that allowed_characters include at least letters, digits, and punctuation
+        # Ensure allowed_characters include at least letters, digits, and punctuation
         if not any(char.isalpha() for char in allowed_characters):
             allowed_characters += string.ascii_uppercase
         if not any(char.isdigit() for char in allowed_characters):
@@ -109,28 +100,25 @@ class PasswordUtilities:
             random.choice(string.punctuation)  # At least one punctuation
         ]
 
-        # Generate the remaining characters randomly from the allowed set
+        # Generate remaining characters randomly from the allowed set
         password_chars.extend(random.choice(allowed_characters) for _ in range(code_length - 3))
+        random.shuffle(password_chars)  # Shuffle the characters to ensure randomness
 
-        # Shuffle the characters to ensure randomness
-        random.shuffle(password_chars)
-
-        # Convert list to a string and return
         code = "".join(password_chars)
-
-        # Copy the generated code into clipboard
-        pyperclip.copy(text=code)
-
+        pyperclip.copy(text=code)  # Copy the generated code to clipboard
         return code
 
     @staticmethod
     def delete_master_password():
+        """Deletes the master password from the keyring."""
         keyring.delete_password(MESSAGES.APP_NAME, MESSAGES.KEYRING_USERNAME)
 
     @staticmethod
     def get_master_password():
+        """Retrieves the master password from the keyring."""
         return keyring.get_password(MESSAGES.APP_NAME, MESSAGES.KEYRING_USERNAME)
 
     @staticmethod
     def save_master_password(master_password: str):
+        """Saves the master password securely in the keyring."""
         keyring.set_password(MESSAGES.APP_NAME, MESSAGES.KEYRING_USERNAME, master_password)
