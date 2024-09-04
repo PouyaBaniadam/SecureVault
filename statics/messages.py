@@ -19,6 +19,11 @@ Remember if you reset your computer, you
 should enter this password again.
 So keep it in a safe place."""
 
+    LABEL = "Label"
+    PASSWORD = "Password"
+    CLOSE = "Close"
+    PASSWORD_COPIED = "Password copied successfully."
+
     @staticmethod
     def field_is_required(field):
         return f"Field '{field}' is required."

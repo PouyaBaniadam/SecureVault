@@ -13,6 +13,7 @@ class Assets:
 	@classmethod
 	def initialize_paths(cls):
 		cls.background_png = cls.resource_path("background.png")
+		cls.copy_png = cls.resource_path("copy.png")
 		cls.export_png = cls.resource_path("export.png")
 		cls.generate_password_png = cls.resource_path("generate_password.png")
 		cls.import_png = cls.resource_path("import.png")
@@ -20,6 +21,7 @@ class Assets:
 		cls.lock_png = cls.resource_path("lock.png")
 		cls.padlock_png = cls.resource_path("padlock.png")
 		cls.search_password_png = cls.resource_path("search_password.png")
+		cls.tags_png = cls.resource_path("tags.png")
 		cls.ubuntu_ttf = cls.resource_path("ubuntu.ttf")
 		cls.verified_png = cls.resource_path("verified.png")
 

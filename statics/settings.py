@@ -23,5 +23,7 @@ class SETTINGS:
     GENERIC_PASSWORD_ALLOWED_CHARACTERS = string.ascii_letters + string.digits + string.punctuation
     MIN_PASSWORD_LENGTH = 8
     MAX_PASSWORD_LENGTH = 24
-
     MASTER_PASSWORD = "master_password"
+
+    # Timer
+    NOTIFICATION_TIMER = 5000

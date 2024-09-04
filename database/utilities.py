@@ -19,6 +19,7 @@ class DatabaseUtilities:
         """Create the database and the passwords table if it doesn't exist."""
         conn = sqlite3.connect(self.db_name)
         cursor = conn.cursor()
+        # Make sure your table definition includes a field for 'salt'
         cursor.execute(Queries.create_password_table)
         conn.commit()
         conn.close()
@@ -37,13 +38,14 @@ class DatabaseUtilities:
     def add_password(self, label, plain_password):
         """Encrypt and add a password to the database and update the labels cache."""
         # Encrypt the password
-        encrypted_password, nonce, tag = self.encryption_util.encrypt_password(plain_password)
+        encrypted_password, nonce, tag, salt = self.encryption_util.encrypt_password(plain_password)
 
         # Save to the database
         conn = sqlite3.connect(self.db_name)
         cursor = conn.cursor()
         try:
-            cursor.execute(Queries.add_password, (label, encrypted_password, nonce, tag))
+            # Insert encrypted password, nonce, tag, and salt into the database
+            cursor.execute(Queries.add_password, (label, encrypted_password, nonce, tag, salt))
             conn.commit()
             # Update the labels cache
             self.labels_cache.append(label)
@@ -67,10 +69,10 @@ class DatabaseUtilities:
         conn.close()
 
         if row:
-            encrypted_password, nonce, tag = row
+            encrypted_password, nonce, tag, salt = row  # Retrieve salt along with other parameters
             try:
                 # Decrypt the password
-                decrypted_password = self.encryption_util.decrypt_password(encrypted_password, nonce, tag)
+                decrypted_password = self.encryption_util.decrypt_password(encrypted_password, nonce, tag, salt)
                 # Optionally cache the result
                 self.password_cache[label] = decrypted_password
                 return decrypted_password
@@ -84,17 +86,16 @@ class DatabaseUtilities:
     def update_password(self, label, new_plain_password):
         """Update an existing password in the database and clear the cache for the updated label."""
         # Encrypt the new password
-        encrypted_password, nonce, tag = self.encryption_util.encrypt_password(new_plain_password)
+        encrypted_password, nonce, tag, salt = self.encryption_util.encrypt_password(new_plain_password)
 
         # Update in the database
         conn = sqlite3.connect(self.db_name)
         cursor = conn.cursor()
-        cursor.execute(Queries.update_password,
-                       (encrypted_password, nonce, tag, label))
+        cursor.execute(Queries.update_password, (encrypted_password, nonce, tag, salt, label))
         conn.commit()
         conn.close()
 
-        # Remove from the cache if exists
+        # Remove from the cache if it exists
         if label in self.password_cache:
             del self.password_cache[label]
 
@@ -118,3 +119,7 @@ class DatabaseUtilities:
     def list_labels(self):
         """List all labels from the in-memory cache."""
         return self.labels_cache
+
+    def get_all_labels(self):
+        """Return all labels from the in-memory cache."""
+        return self.list_labels()

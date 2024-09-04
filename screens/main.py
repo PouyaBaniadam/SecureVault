@@ -1,9 +1,11 @@
+from PySide6.QtCore import Qt, QRect, QEvent
 from PySide6.QtGui import QIcon, QPixmap
-from PySide6.QtWidgets import QMainWindow, QLabel
+from PySide6.QtWidgets import QMainWindow, QLabel, QListWidget, QListWidgetItem
 
 from generator.assets import Assets
-from statics.messages import MESSAGES
 from screens.add_password import AddPasswordDialog
+from screens.password_detail import PasswordDetailsDialog
+from statics.messages import MESSAGES
 from statics.settings import SETTINGS
 from themes.buttons.icon_button import IconButton
 from themes.buttons.text_icon_button import TextIconButton
@@ -22,6 +24,7 @@ class SecureVault(QMainWindow):
         self.bg_label = None
         self.import_button = None
         self.export_button = None
+        self.results_list = None
 
         self.setWindowTitle(MESSAGES.APP_NAME)
         self.setFixedSize(400, 500)
@@ -29,6 +32,13 @@ class SecureVault(QMainWindow):
 
         self.set_background_image()
         self.load_base_widgets()
+        self.create_search_results_widget()
+
+        # Connect the search input textChanged signal to perform_search
+        self.search_input.textChanged.connect(self.perform_search)
+
+        # Install event filter to detect clicks outside
+        self.installEventFilter(self)
 
     def set_background_image(self):
         self.bg_label = QLabel(self)
@@ -44,9 +54,9 @@ class SecureVault(QMainWindow):
             y=70,
             w=300,
             h=30,
-            background_color=SETTINGS.LIGHT_COLOR,
-            color=SETTINGS.DARK_COLOR,
-            border_color=SETTINGS.LIGHT_COLOR,
+            background_color=SETTINGS.DARK_COLOR,
+            color=SETTINGS.LIGHT_COLOR,
+            border_color=SETTINGS.PRIMARY_COLOR,
             border_radius=SETTINGS.BUTTON_BORDER_RADIUS,
             padding=5,
             selection_background_color=SETTINGS.PRIMARY_COLOR
@@ -55,7 +65,7 @@ class SecureVault(QMainWindow):
         self.search_button = IconButton(
             parent=self,
             icon_path=Assets.search_password_png,
-            x=330,
+            x=335,
             y=60,
             w=SETTINGS.ICON_SIZE,
             h=SETTINGS.ICON_SIZE,
@@ -70,7 +80,7 @@ class SecureVault(QMainWindow):
             y=440,
             w=SETTINGS.ICON_SIZE,
             h=SETTINGS.ICON_SIZE,
-            on_click=self.show_add_password_dialog,  # Connect button click to show the dialog
+            on_click=self.show_add_password_dialog,
         )
 
         self.import_button = TextIconButton(
@@ -98,6 +108,79 @@ class SecureVault(QMainWindow):
             background_color=SETTINGS.PRIMARY_COLOR,
             color=SETTINGS.LIGHT_COLOR,
         )
+
+    def create_search_results_widget(self):
+        # Create a QListWidget for search results
+        self.results_list = QListWidget(self)
+        self.results_list.setGeometry(QRect(30, 100, 300, 200))  # Adjust size and position as needed
+        self.results_list.setStyleSheet("""
+            QListWidget {
+                background-color: %s;
+                color: %s;
+                border: 1px solid %s;
+                border-radius: 8px;
+            }
+            QListWidget::item {
+                padding: 10px;
+            }
+        """ % (SETTINGS.DARK_COLOR, SETTINGS.LIGHT_COLOR, SETTINGS.PRIMARY_COLOR))
+
+        self.results_list.hide()  # Hide the results list initially
+        self.results_list.setFocusPolicy(Qt.NoFocus)
+        self.results_list.setSpacing(1)  # Optional: Adjust spacing between items
+
+        self.results_list.itemClicked.connect(self.on_result_item_clicked)
+
+    def perform_search(self):
+        """
+        Perform the search based on the current input text and update the list.
+        """
+        search_query = self.search_input.text().lower()
+
+        if not search_query:
+            self.results_list.hide()  # Hide the results list if search query is empty
+            return
+
+        self.results_list.clear()  # Clear previous results
+
+        # Fetch all labels from the database
+        all_labels = self.database_utilities.list_labels()
+
+        # Filter labels based on the search query
+        filtered_labels = [label for label in all_labels if search_query in label.lower()]
+
+        # Populate the results list
+        if filtered_labels:
+            self.results_list.show()  # Show the results list if there are results
+            for label in filtered_labels:
+                item = QListWidgetItem(label)
+                self.results_list.addItem(item)
+        else:
+            self.results_list.hide()  # Hide the results list if no results
+
+    def on_result_item_clicked(self, item):
+        """
+        Handles the click event on a result item.
+        """
+        label_text = item.text()
+        decrypted_password = self.database_utilities.retrieve_password(label_text)
+
+        if decrypted_password:
+            dialog = PasswordDetailsDialog(label_text, decrypted_password, self)
+            dialog.exec()
+
+        # Hide the results list after selecting an item
+        self.results_list.hide()
+
+    def eventFilter(self, obj, event):
+        """
+        Filter events to hide the results list if clicking outside the search area.
+        """
+        if event.type() == QEvent.MouseButtonPress:
+            if not (self.search_input.rect().contains(event.pos()) or
+                    self.results_list.rect().contains(event.pos())):
+                self.results_list.hide()  # Hide the results list if clicking outside
+        return super().eventFilter(obj, event)
 
     def show_add_password_dialog(self):
         dialog = AddPasswordDialog(self)
