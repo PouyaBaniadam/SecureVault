@@ -1,9 +1,9 @@
 from PySide6.QtWidgets import QDialog, QMessageBox
 
 from generator.assets import Assets
+from notification.utilities import show_message_box
 from password.utilities import PasswordUtilities
 from statics.messages import MESSAGES
-from statics.options import OPTIONS
 from statics.settings import SETTINGS
 from themes.buttons.text_button import TextButton
 from themes.buttons.text_icon_button import TextIconButton
@@ -223,16 +223,8 @@ class MasterPasswordDialog(QDialog):
             confirm_new_master_password=confirm_password
         )
 
-        msg_box = QMessageBox(self)
-        msg_box.setText(message)
-
         if has_errors:
-            msg_box.setIcon(QMessageBox.Critical)
-            msg_box.setWindowTitle(OPTIONS.ERROR)
+            show_message_box(self, title=MESSAGES.ERROR, icon_type=QMessageBox.Critical, message=message)
 
         else:
-            msg_box.setIcon(QMessageBox.Information)
-            msg_box.setWindowTitle(OPTIONS.SUCCESS)
-            self.accept()
-
-        msg_box.exec()
+            show_message_box(self, title=MESSAGES.SUCCESS, icon_type=QMessageBox.Information, message=message)

@@ -1,14 +1,14 @@
 from PySide6.QtWidgets import QDialog, QMessageBox
 
 from generator.assets import Assets
+from notification.utilities import show_message_box
+from password.utilities import PasswordUtilities
 from statics.messages import MESSAGES
-from statics.options import OPTIONS
 from statics.settings import SETTINGS
 from themes.buttons.text_button import TextButton
 from themes.buttons.text_icon_button import TextIconButton
 from themes.inputs.text_input import TextInput
 from themes.labels.text_label import TextLabel
-from password.utilities import PasswordUtilities
 
 
 class AddPasswordDialog(QDialog):
@@ -165,22 +165,14 @@ class AddPasswordDialog(QDialog):
         label_name = self.input_label.text()
         plain_password = self.input_password.text()
 
-        is_valid, message = self.password_utilities.submit_new_data(label_name=label_name,
-                                                                    plain_password=plain_password)
-
-        msg_box = QMessageBox(self)
-        msg_box.setText(message)
-
-        if is_valid:
-            msg_box.setIcon(QMessageBox.Information)
-            msg_box.setWindowTitle(OPTIONS.SUCCESS)
-            self.accept()
+        has_errors, message = self.password_utilities.submit_new_data(label_name=label_name,
+                                                                      plain_password=plain_password)
+        if has_errors:
+            show_message_box(self, title=MESSAGES.ERROR, icon_type=QMessageBox.Critical, message=message)
 
         else:
-            msg_box.setIcon(QMessageBox.Critical)
-            msg_box.setWindowTitle(OPTIONS.ERROR)
+            show_message_box(self, title=MESSAGES.SUCCESS, icon_type=QMessageBox.Information, message=message)
 
-        msg_box.exec()
 
     def generate_password(self):
         generated_password = self.password_utilities.generate_random_code(

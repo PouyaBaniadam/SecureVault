@@ -3,7 +3,7 @@ from PySide6.QtGui import QIcon, QPixmap
 from PySide6.QtWidgets import QMainWindow, QLabel, QListWidget, QListWidgetItem, QMessageBox
 
 from generator.assets import Assets
-from password.utilities import PasswordUtilities
+from notification.utilities import show_message_box
 from screens.add_password import AddPasswordDialog
 from screens.master_password_dialog import MasterPasswordDialog
 from screens.password_detail import PasswordDetailsDialog
@@ -180,16 +180,11 @@ class SecureVault(QMainWindow):
         Handles the click event on a result item.
         """
         label_text = item.text()
-        has_errors, error_message, decrypted_password = self.database_utilities.retrieve_password(label_text)
+        has_errors, message, decrypted_password = self.database_utilities.retrieve_password(label_text)
 
         if has_errors:
-            error_dialog = QMessageBox(self)
-            error_dialog.setIcon(QMessageBox.Critical)
+            show_message_box(self, title=MESSAGES.ERROR, icon_type=QMessageBox.Critical, message=message)
 
-            error_dialog.setWindowTitle(MESSAGES.ERROR)
-            error_dialog.setText(MESSAGES.ERROR_HAPPENED)
-            error_dialog.setInformativeText(error_message)
-            error_dialog.exec()
 
         else:
             # Show the password details dialog

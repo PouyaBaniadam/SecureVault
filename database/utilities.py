@@ -61,7 +61,7 @@ class DatabaseUtilities:
     def retrieve_password(self, label):
         """Retrieve and decrypt a password from the database on demand."""
         has_errors = False
-        error_message = ""
+        message = ""
         decrypted_password = None
 
         # If we have the password in the cache, then there is no point of an extra query at all!
@@ -85,9 +85,9 @@ class DatabaseUtilities:
             # This usually happens if the master password is not the same. So we rely on that :)
             except InvalidTag:
                 has_errors = True
-                error_message = MESSAGES.MASTER_PASSWORD_NOT_THE_SAME
+                message = MESSAGES.MASTER_PASSWORD_NOT_THE_SAME
 
-        return has_errors, error_message, decrypted_password
+        return has_errors, message, decrypted_password
 
     def update_password(self, label, new_plain_password):
         """Update an existing password in the database and clear the cache for the updated label."""

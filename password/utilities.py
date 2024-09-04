@@ -61,24 +61,40 @@ class PasswordUtilities:
         return label_name in labels
 
     def submit_new_data(self, label_name: str, plain_password: str) -> tuple[bool, str]:
-        """Encrypts and saves a new password to the database."""
+        """
+        Encrypts and saves a new password to the database.
+        :param label_name: User input for label name.
+        :param plain_password: User input for plain password.
+        :return: has_errors and message
+        """
+
+        message = ""
+        has_errors = False
+
         if label_name == "" or plain_password == "":
             message = MESSAGES.BOTH_LABEL_AND_PASSWORD_REQUIRED
-            return False, message
+            has_errors = True
 
         elif self.does_label_exist(label_name=label_name):
             message = MESSAGES.ALREADY_TAKEN_LABEL
-            return False, message
+            has_errors = True
 
         else:
             # Save encrypted password to the database
             self.password_manager.add_password(label_name, plain_password)
             message = MESSAGES.PASSWORD_SAVED
-            return True, message
+            has_errors = False
+
+        return has_errors, message
 
     @staticmethod
     def generate_random_code(code_length: int = SETTINGS.MIN_PASSWORD_LENGTH, *allowed_characters: str) -> str:
-        """Generates a random string of characters with at least one letter, one number, and one punctuation."""
+        """
+        Generates a random string of characters with at least one letter, one number, and one punctuation.
+        :param code_length: Number of characters to generate.
+        :param allowed_characters: Available characters for password generation.
+        :return:
+        """
         allowed_characters: str = "".join(allowed_characters)
 
         # Use default allowed characters if none are specified
@@ -109,22 +125,39 @@ class PasswordUtilities:
         return code
 
     @staticmethod
-    def delete_master_password():
-        """Deletes the master password from the keyring."""
+    def delete_master_password() -> None:
+        """
+        Deletes the master password from the keyring.
+        :return: None
+        """
         keyring.delete_password(MESSAGES.APP_NAME, MESSAGES.KEYRING_USERNAME)
 
     @staticmethod
-    def get_master_password():
-        """Retrieves the master password from the keyring."""
+    def get_master_password() -> None:
+        """
+        Retrieves the master password from the keyring.
+        :return: None
+        """
         return keyring.get_password(MESSAGES.APP_NAME, MESSAGES.KEYRING_USERNAME) or ""
 
     @staticmethod
-    def save_master_password(master_password: str):
-        """Saves the master password securely in the keyring."""
+    def save_master_password(master_password: str) -> None:
+        """
+        Saves the master password securely in the keyring.
+        :param master_password: user input for master password
+        :return: None
+        """
         keyring.set_password(MESSAGES.APP_NAME, MESSAGES.KEYRING_USERNAME, master_password)
 
     def validate_master_password_update(self, current_master_password, new_master_password: str,
-                                        confirm_new_master_password: str) -> tuple[bool, str]:
+                                        confirm_new_master_password: str):
+        """
+        This function is for validating new master password.
+        :param current_master_password: user input for current master password
+        :param new_master_password: user input for new master password
+        :param confirm_new_master_password: user input for confirm new master password
+        :return: has_errors and message
+        """
 
         message = ""
         has_errors = False
@@ -134,7 +167,6 @@ class PasswordUtilities:
         if not current_master_password:
             message = MESSAGES.CURRENT_PASSWORD_EMPTY
             has_errors = True
-
 
         if not new_master_password:
             message = MESSAGES.NEW_PASSWORD_EMPTY
