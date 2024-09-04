@@ -125,7 +125,7 @@ class PasswordUtilities:
         return code
 
     @staticmethod
-    def delete_master_password() -> None:
+    def delete_master_password():
         """
         Deletes the master password from the keyring.
         :return: None
@@ -133,7 +133,7 @@ class PasswordUtilities:
         keyring.delete_password(MESSAGES.APP_NAME, MESSAGES.KEYRING_USERNAME)
 
     @staticmethod
-    def get_master_password() -> None:
+    def get_master_password():
         """
         Retrieves the master password from the keyring.
         :return: None
@@ -141,7 +141,7 @@ class PasswordUtilities:
         return keyring.get_password(MESSAGES.APP_NAME, MESSAGES.KEYRING_USERNAME) or ""
 
     @staticmethod
-    def save_master_password(master_password: str) -> None:
+    def save_master_password(master_password: str):
         """
         Saves the master password securely in the keyring.
         :param master_password: user input for master password
