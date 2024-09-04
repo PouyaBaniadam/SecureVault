@@ -14,12 +14,22 @@ from password.utilities import PasswordUtilities
 class AddPasswordDialog(QDialog):
     def __init__(self, parent=None):
         super().__init__(parent)
+        self.password_status = None
+        self.generate_password_button = None
+        self.input_password = None
+        self.label_password = None
+        self.label_status = None
+        self.input_label = None
+        self.save_button = None
+
         self.setWindowTitle(MESSAGES.ADD_PASSWORD)
         self.setFixedSize(400, 250)
 
-        # Create an instance of PasswordUtilities
         self.password_utilities = PasswordUtilities()
 
+        self.load_base_widgets()
+
+    def load_base_widgets(self):
         self.label_status = TextLabel(
             parent=self,
             text="Label",
@@ -155,7 +165,8 @@ class AddPasswordDialog(QDialog):
         label_name = self.input_label.text()
         plain_password = self.input_password.text()
 
-        is_valid, message = self.password_utilities.submit_new_data(label_name=label_name, plain_password=plain_password)
+        is_valid, message = self.password_utilities.submit_new_data(label_name=label_name,
+                                                                    plain_password=plain_password)
 
         msg_box = QMessageBox(self)
         msg_box.setText(message)

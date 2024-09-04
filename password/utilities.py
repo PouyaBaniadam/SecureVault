@@ -122,3 +122,36 @@ class PasswordUtilities:
     def save_master_password(master_password: str):
         """Saves the master password securely in the keyring."""
         keyring.set_password(MESSAGES.APP_NAME, MESSAGES.KEYRING_USERNAME, master_password)
+
+    def validate_master_password_update(self, current_master_password, new_master_password: str,
+                                        confirm_new_master_password: str) -> tuple[bool, str]:
+
+        message = ""
+        has_errors = False
+
+        master_password = self.get_master_password()
+
+        if not current_master_password:
+            message = MESSAGES.CURRENT_PASSWORD_EMPTY
+            has_errors = True
+
+
+        if not new_master_password:
+            message = MESSAGES.NEW_PASSWORD_EMPTY
+            has_errors = True
+
+        if not confirm_new_master_password:
+            message = MESSAGES.CONFIRM_PASSWORD_EMPTY
+            has_errors = True
+
+        # Check if current password matches the stored master password
+        if current_master_password != master_password:
+            message = MESSAGES.CURRENT_PASSWORD_INCORRECT
+            has_errors = True
+
+        # Check if the new password and confirm password match
+        if new_master_password != confirm_new_master_password:
+            message = MESSAGES.PASSWORDS_DO_NOT_MATCH
+            has_errors = True
+
+        return has_errors, message

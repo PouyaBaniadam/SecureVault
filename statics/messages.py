@@ -36,6 +36,12 @@ You do not have access to any of your previous passwords until you give me the p
     ERROR_HAPPENED = "An error occurred."
     SUBMIT = "Submit"
     CANCEL = "Cancel"
+    PASSWORDS_DO_NOT_MATCH = "Passwords do not match."
+    PASSWORD_UPDATE_SUCCESS = "Password updated successfully."
+    CURRENT_PASSWORD_INCORRECT = "Current master password is incorrect."
+    CONFIRM_PASSWORD_EMPTY = "Confirmation password is empty."
+    NEW_PASSWORD_EMPTY = "New password is empty."
+    CURRENT_PASSWORD_EMPTY = "Current master password is empty."
 
     @staticmethod
     def field_is_required(field):

@@ -1,25 +1,41 @@
-from PySide6.QtWidgets import QDialog
+from PySide6.QtWidgets import QDialog, QMessageBox
 
 from generator.assets import Assets
 from password.utilities import PasswordUtilities
 from statics.messages import MESSAGES
+from statics.options import OPTIONS
 from statics.settings import SETTINGS
 from themes.buttons.text_button import TextButton
 from themes.buttons.text_icon_button import TextIconButton
-from themes.labels.text_label import TextLabel
-from themes.labels.icon_label import IconLabel
 from themes.inputs.text_input import TextInput
+from themes.labels.icon_label import IconLabel
+from themes.labels.text_label import TextLabel
 
 
 class MasterPasswordDialog(QDialog):
     def __init__(self, parent=None):
         super().__init__(parent)
+        self.cancel_button = None
+        self.confirm_password_status = None
+        self.confirm_password_input = None
+        self.confirm_password_label = None
+        self.new_password_status = None
+        self.generate_password_button = None
+        self.new_password_input = None
+        self.new_password_label = None
+        self.old_password_input = None
+        self.old_password_label = None
+        self.icon_label = None
+        self.submit_button = None
+
         self.setWindowTitle(MESSAGES.UPDATE_MASTER_PASSWORD)
         self.setFixedSize(400, 350)
 
-        # Create an instance of PasswordUtilities
         self.password_utilities = PasswordUtilities()
 
+        self.load_base_widgets()
+
+    def load_base_widgets(self):
         self.icon_label = IconLabel(
             parent=self,
             icon_path=Assets.lock_png,
@@ -143,7 +159,7 @@ class MasterPasswordDialog(QDialog):
             y=310,
             w=100,
             h=30,
-            on_click=self.submit_changes,
+            on_click=self.validate_and_save,
             background_color=SETTINGS.PRIMARY_COLOR,
             color=SETTINGS.LIGHT_COLOR,
             border_radius=SETTINGS.BUTTON_BORDER_RADIUS,
@@ -192,9 +208,31 @@ class MasterPasswordDialog(QDialog):
         self.new_password_input.setText(generated_password)
         self.confirm_password_input.setText(generated_password)
 
-    def submit_changes(self):
-        old_password = self.old_password_input.text()
+    def validate_and_save(self):
+        """
+        Validates the inputs and saves the data if everything is correct.
+        """
+
+        current_password = self.old_password_input.text()
         new_password = self.new_password_input.text()
         confirm_password = self.confirm_password_input.text()
 
-        self.close()
+        has_errors, message = self.password_utilities.validate_master_password_update(
+            current_master_password=current_password,
+            new_master_password=new_password,
+            confirm_new_master_password=confirm_password
+        )
+
+        msg_box = QMessageBox(self)
+        msg_box.setText(message)
+
+        if has_errors:
+            msg_box.setIcon(QMessageBox.Critical)
+            msg_box.setWindowTitle(OPTIONS.ERROR)
+
+        else:
+            msg_box.setIcon(QMessageBox.Information)
+            msg_box.setWindowTitle(OPTIONS.SUCCESS)
+            self.accept()
+
+        msg_box.exec()
