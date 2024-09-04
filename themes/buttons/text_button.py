@@ -37,7 +37,7 @@ class TextButton(QPushButton, UIUtilities):
         shadow = QGraphicsDropShadowEffect(self)
         shadow.setBlurRadius(SETTINGS.BUTTON_BORDER_RADIUS)
         shadow.setOffset(SETTINGS.SHADOW_OFFSET, SETTINGS.SHADOW_OFFSET)
-        shadow.setColor(SETTINGS.DARK_COLOR)
+        shadow.setColor(SETTINGS.SHADOW_COLOR)
 
         self.setGraphicsEffect(shadow)
 

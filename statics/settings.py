@@ -13,6 +13,7 @@ class SETTINGS:
     SUCCESS_COLOR = "#31C169"
     WARNING_COLOR = "#FF6E24"
     INFO_COLOR = "#0895DA"
+    SHADOW_COLOR = "#151515"
 
     # Dimensions
     ICON_SIZE = 50

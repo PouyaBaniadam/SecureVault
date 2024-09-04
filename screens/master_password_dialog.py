@@ -97,7 +97,7 @@ class MasterPasswordDialog(QDialog):
             parent=self,
             text="",
             x=20,
-            y=190,
+            y=195,
             w=360,
             h=20,
         )
@@ -131,7 +131,7 @@ class MasterPasswordDialog(QDialog):
             parent=self,
             text="",
             x=20,
-            y=280,
+            y=285,
             w=360,
             h=20,
         )
