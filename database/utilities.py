@@ -50,7 +50,7 @@ class DatabaseUtilities:
                 decrypted_password = self.encryption_util.decrypt_password(encrypted_password, nonce, tag, salt)
                 self.password_cache[label] = decrypted_password
             except InvalidTag:
-                print(f"Failed to decrypt password for label '{label}' due to invalid tag. Skipping.")
+                print(f"Failed to decrypt password for label '{label}' due to invalid tag. Skipping...")
 
     def clear_cache(self):
         """Clear all caches when the master password is changed."""
