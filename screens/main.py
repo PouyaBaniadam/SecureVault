@@ -146,7 +146,7 @@ class SecureVault(QMainWindow):
 
         self.results_list.hide()  # Hide the results list initially
         self.results_list.setFocusPolicy(Qt.NoFocus)
-        self.results_list.setSpacing(1)  # Optional: Adjust spacing between items
+        self.results_list.setSpacing(1)
 
         self.results_list.itemClicked.connect(self.on_result_item_clicked)
 
