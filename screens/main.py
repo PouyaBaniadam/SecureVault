@@ -1,12 +1,7 @@
-import base64
-import json
-import sqlite3
-
 from PySide6.QtCore import Qt, QRect, QEvent
 from PySide6.QtGui import QIcon, QPixmap
 from PySide6.QtWidgets import QMainWindow, QLabel, QListWidget, QListWidgetItem, QMessageBox, QFileDialog
 
-from database.queries import Queries
 from generator.assets import Assets
 from notification.utilities import show_message_box
 from screens.add_password import AddPasswordDialog
@@ -221,16 +216,16 @@ class SecureVault(QMainWindow):
         # Open a file dialog to select the export location
         file_path, _ = QFileDialog.getSaveFileName(
             self,
-            "Export Data",
-            "",
-            "JSON Files (*.json);;All Files (*)"
+            caption=MESSAGES.EXPORT_DATA,
+            dir="",
+            filter="JSON Files (*.json);;All Files (*)"
         )
 
         if file_path:
             if not file_path.lower().endswith('.json'):
                 file_path += '.json'
 
-            has_errors, message = self.database_utilities.export_data(file_path)
+            has_errors, message = self.database_utilities.export_data_to_json(file_path)
 
             if has_errors:
                 show_message_box(self, title=MESSAGES.ERROR, icon_type=QMessageBox.Critical, message=message)
@@ -241,60 +236,15 @@ class SecureVault(QMainWindow):
     def import_data(self):
         file_path, _ = QFileDialog.getOpenFileName(
             self,
-            "Import Data",
-            "",
-            "JSON Files (*.json);;All Files (*)"
+            caption=MESSAGES.IMPORT_DATA,
+            dir="",
+            filter="JSON Files (*.json);;All Files (*)"
         )
 
         if file_path:
-            self.import_from_json(file_path)
+            has_errors, message = self.database_utilities.import_data_from_json(file_path)
+            if has_errors:
+                show_message_box(self, title=MESSAGES.ERROR, icon_type=QMessageBox.Critical, message=message)
 
-    def import_from_json(self, file_path):
-        try:
-            with open(file_path, 'r') as f:
-                data = json.load(f)
-
-            conn = sqlite3.connect(self.database_utilities.db_name)
-            cursor = conn.cursor()
-
-            # Clear existing data
-            cursor.execute(Queries.delete_password_table)
-            conn.commit()
-
-            for item in data:
-                label = item.get("label")
-                encrypted_password_b64 = item.get("encrypted_password")
-                nonce_b64 = item.get("nonce")
-                tag_b64 = item.get("tag")
-                salt_b64 = item.get("salt")
-
-                try:
-                    # Decode from Base64 to bytes
-                    encrypted_password = base64.b64decode(encrypted_password_b64)
-                    nonce = base64.b64decode(nonce_b64)
-                    tag = base64.b64decode(tag_b64)
-                    salt = base64.b64decode(salt_b64)
-
-                    # Insert the new data into the database
-                    cursor.execute(
-                        Queries.add_password,
-                        (label, encrypted_password, nonce, tag, salt)
-                    )
-                    conn.commit()
-
-                except (ValueError, TypeError) as e:
-                    print(f"Error decoding base64 data: {e}")
-                    QMessageBox.critical(self, "Error", f"Invalid base64 data for label '{label}'.")
-                    conn.close()
-                    return
-
-            conn.close()
-
-            # Update the labels and password caches
-            self.database_utilities.load_all_labels()
-            self.database_utilities.clear_cache()
-
-            QMessageBox.information(self, "Success", "Data imported successfully!")
-
-        except Exception as e:
-            QMessageBox.critical(self, "Error", f"Failed to import data: {str(e)}")
+            else:
+                show_message_box(self, title=MESSAGES.SUCCESS, icon_type=QMessageBox.Information, message=message)

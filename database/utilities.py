@@ -3,9 +3,11 @@ import json
 import sqlite3
 
 from cryptography.exceptions import InvalidTag
+from pyexpat.errors import messages
 
 from database.queries import Queries
 from encyption.utilities import EncryptionUtils
+from notification.utilities import show_message_box
 from statics.messages import MESSAGES
 
 
@@ -195,7 +197,7 @@ class DatabaseUtilities:
             # Update the cache with the newly encrypted password
             self.password_cache[label] = decrypted_password
 
-    def export_data(self, file_path):
+    def export_data_to_json(self, file_path):
         """
         Export encrypted passwords and their metadata to a JSON file.
         :param file_path: The path where the JSON file will be saved.
@@ -225,6 +227,60 @@ class DatabaseUtilities:
 
             with open(file_path, 'w') as json_file:
                 json.dump(data, json_file, indent=4)
+
+        except Exception as e:
+            has_errors = True
+            message = e
+
+        return has_errors, message
+
+    def import_data_from_json(self, file_path):
+        has_errors = False
+        message = MESSAGES.IMPORTED_DATA_SUCCESSFULLY
+
+        try:
+            with open(file_path, 'r') as f:
+                data = json.load(f)
+
+            conn = sqlite3.connect(self.db_name)
+            cursor = conn.cursor()
+
+            # Clear existing data
+            cursor.execute(Queries.delete_password_table)
+            conn.commit()
+
+            for item in data:
+                label = item.get("label")
+                encrypted_password_b64 = item.get("encrypted_password")
+                nonce_b64 = item.get("nonce")
+                tag_b64 = item.get("tag")
+                salt_b64 = item.get("salt")
+
+                try:
+                    # Decode from Base64 to bytes
+                    encrypted_password = base64.b64decode(encrypted_password_b64)
+                    nonce = base64.b64decode(nonce_b64)
+                    tag = base64.b64decode(tag_b64)
+                    salt = base64.b64decode(salt_b64)
+
+                    # Insert the new data into the database
+                    cursor.execute(
+                        Queries.add_password,
+                        (label, encrypted_password, nonce, tag, salt)
+                    )
+                    conn.commit()
+
+                except (ValueError, TypeError) as e:
+                    has_errors = True
+                    message = e
+
+                    conn.close()
+
+            conn.close()
+
+            # Update the labels and password caches
+            self.load_all_labels()
+            self.clear_cache()
 
         except Exception as e:
             has_errors = True
