@@ -17,8 +17,8 @@ class DatabaseUtilities:
         self.labels_cache = []  # Cache for labels
         self.password_cache = {}  # Cache for passwords
         self._initialize_database()
-        self._load_all_labels()  # Load all labels on initialization
-        self._load_all_passwords()  # Load all passwords into the cache on initialization
+        self.load_all_labels()  # Load all labels on initialization
+        self.load_all_passwords()  # Load all passwords into the cache on initialization
 
     def _initialize_database(self):
         """Create the database and the passwords table if it doesn't exist."""
@@ -28,7 +28,7 @@ class DatabaseUtilities:
         conn.commit()
         conn.close()
 
-    def _load_all_labels(self):
+    def load_all_labels(self):
         """Load all labels from the database into memory."""
         conn = sqlite3.connect(self.db_name)
         cursor = conn.cursor()
@@ -37,7 +37,7 @@ class DatabaseUtilities:
         conn.close()
         self.labels_cache = [row[0] for row in rows]
 
-    def _load_all_passwords(self):
+    def load_all_passwords(self):
         """Load all passwords from the database into the cache."""
         conn = sqlite3.connect(self.db_name)
         cursor = conn.cursor()

@@ -155,18 +155,16 @@ class SecureVault(QMainWindow):
         search_query = self.search_input.text().lower()
 
         if not search_query:
-            self.results_list.hide()  # Hide the results list if search query is empty
+            self.results_list.hide()
             return
 
         self.results_list.clear()  # Clear previous results
 
-        # Fetch all labels from the database
+        self.database_utilities.load_all_labels()
         all_labels = self.database_utilities.labels_cache
 
-        # Filter labels based on the search query
         filtered_labels = [label for label in all_labels if search_query in label.lower()]
 
-        # Populate the results list
         if filtered_labels:
             self.results_list.show()  # Show the results list if there are results
             for label in filtered_labels:

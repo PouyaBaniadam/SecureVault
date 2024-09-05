@@ -22,7 +22,6 @@ if __name__ == "__main__":
 
     # Master password loader
     master_password = PasswordUtilities.get_master_password()
-    print(master_password)
 
     # Initializations
     encryption_utilities = EncryptionUtils(master_password=master_password)
@@ -34,7 +33,7 @@ if __name__ == "__main__":
         setup_page.show()
 
     else:
-        database_utilities._load_all_labels()
+        database_utilities.load_all_labels()
 
         window = SecureVault(database_utilities=database_utilities)
         window.show()
