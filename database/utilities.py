@@ -213,13 +213,15 @@ class DatabaseUtilities:
 
             data = []
             for label, encrypted_password, nonce, tag, salt in rows:
-                data.append({
-                    'label': label,
-                    'encrypted_password': base64.b64encode(encrypted_password).decode('utf-8'),
-                    'nonce': base64.b64encode(nonce).decode('utf-8'),
-                    'tag': base64.b64encode(tag).decode('utf-8'),
-                    'salt': base64.b64encode(salt).decode('utf-8')
-                })
+                data.append(
+                    {
+                        'label': label,
+                        'encrypted_password': base64.b64encode(encrypted_password).decode('utf-8'),
+                        'nonce': base64.b64encode(nonce).decode('utf-8'),
+                        'tag': base64.b64encode(tag).decode('utf-8'),
+                        'salt': base64.b64encode(salt).decode('utf-8')
+                    }
+                )
 
             with open(file_path, 'w') as json_file:
                 json.dump(data, json_file, indent=4)
