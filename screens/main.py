@@ -131,7 +131,7 @@ class SecureVault(QMainWindow):
     def create_search_results_widget(self):
         # Create a QListWidget for search results
         self.results_list = QListWidget(self)
-        self.results_list.setGeometry(QRect(30, 100, 300, 200))  # Adjust size and position as needed
+        self.results_list.setGeometry(QRect(30, 100, 300, 200))
         self.results_list.setStyleSheet("""
             QListWidget {
                 background-color: %s;
