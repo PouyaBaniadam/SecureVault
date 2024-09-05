@@ -125,10 +125,6 @@ class DatabaseUtilities:
         if label in self.password_cache:
             del self.password_cache[label]
 
-    def list_labels(self):
-        """List all labels from the in-memory cache."""
-        return self.labels_cache
-
     def reencrypt_passwords(self, old_master_password, new_master_password):
         """
         Re-encrypt all stored passwords with the new master password.

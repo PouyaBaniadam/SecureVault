@@ -57,7 +57,7 @@ class PasswordUtilities:
     def does_label_exist(self, label_name: str) -> bool:
         """Checks if the label already exists in the database."""
         label_name = label_name.strip().lower()
-        labels = self.password_manager.list_labels()
+        labels = self.password_manager.labels_cache
         return label_name in labels
 
     def submit_new_data(self, label_name: str, plain_password: str) -> tuple[bool, str]:

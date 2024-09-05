@@ -161,7 +161,7 @@ class SecureVault(QMainWindow):
         self.results_list.clear()  # Clear previous results
 
         # Fetch all labels from the database
-        all_labels = self.database_utilities.list_labels()
+        all_labels = self.database_utilities.labels_cache
 
         # Filter labels based on the search query
         filtered_labels = [label for label in all_labels if search_query in label.lower()]
