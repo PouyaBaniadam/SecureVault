@@ -74,7 +74,6 @@ class DatabaseUtilities:
             # Update the labels and password caches
             self.labels_cache.append(label)
             self.password_cache[label] = plain_password
-            print(self.labels_cache)
         except sqlite3.IntegrityError:
             print(f"Error: A password with label '{label}' already exists.")
         finally:
@@ -106,7 +105,6 @@ class DatabaseUtilities:
 
             # This usually happens if the master password is not the same. So we rely on that :)
             except InvalidTag:
-                print(self.password_cache)
                 has_errors = True
                 message = MESSAGES.MASTER_PASSWORD_NOT_THE_SAME
 
@@ -196,9 +194,6 @@ class DatabaseUtilities:
 
             # Update the cache with the newly encrypted password
             self.password_cache[label] = decrypted_password
-
-        print("All passwords have been re-encrypted with the new master password.")
-        print("Password cache has been updated.")
 
     def export_data(self, file_path):
         """
