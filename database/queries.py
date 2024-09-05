@@ -31,3 +31,5 @@ class Queries:
     SELECT label, encrypted_password, nonce, tag, salt
     FROM passwords;
     """
+
+    delete_password_table = """DELETE FROM passwords"""
