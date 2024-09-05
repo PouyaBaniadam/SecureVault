@@ -129,10 +129,6 @@ class DatabaseUtilities:
         """List all labels from the in-memory cache."""
         return self.labels_cache
 
-    def get_all_labels(self):
-        """Return all labels from the in-memory cache."""
-        return self.list_labels()
-
     def reencrypt_passwords(self, old_master_password, new_master_password):
         """
         Re-encrypt all stored passwords with the new master password.
