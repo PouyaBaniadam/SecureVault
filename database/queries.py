@@ -26,3 +26,8 @@ class Queries:
     list_passwords = """SELECT label FROM passwords"""
 
     load_labels = """SELECT label FROM passwords"""
+
+    load_all_passwords = """
+    SELECT label, encrypted_password, nonce, tag, salt
+    FROM passwords;
+    """

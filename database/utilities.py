@@ -18,6 +18,7 @@ class DatabaseUtilities:
         self.password_cache = {}  # Cache for passwords
         self._initialize_database()
         self._load_all_labels()  # Load all labels on initialization
+        self._load_all_passwords()  # Load all passwords into the cache on initialization
 
     def _initialize_database(self):
         """Create the database and the passwords table if it doesn't exist."""
@@ -36,6 +37,21 @@ class DatabaseUtilities:
         conn.close()
         self.labels_cache = [row[0] for row in rows]
 
+    def _load_all_passwords(self):
+        """Load all passwords from the database into the cache."""
+        conn = sqlite3.connect(self.db_name)
+        cursor = conn.cursor()
+        cursor.execute(Queries.load_all_passwords)
+        rows = cursor.fetchall()
+        conn.close()
+        for row in rows:
+            label, encrypted_password, nonce, tag, salt = row
+            try:
+                decrypted_password = self.encryption_util.decrypt_password(encrypted_password, nonce, tag, salt)
+                self.password_cache[label] = decrypted_password
+            except InvalidTag:
+                print(f"Failed to decrypt password for label '{label}' due to invalid tag. Skipping.")
+
     def clear_cache(self):
         """Clear all caches when the master password is changed."""
         self.labels_cache = []
@@ -53,8 +69,9 @@ class DatabaseUtilities:
             # Insert encrypted password, nonce, tag, and salt into the database
             cursor.execute(Queries.add_password, (label, encrypted_password, nonce, tag, salt))
             conn.commit()
-            # Update the labels cache
+            # Update the labels and password caches
             self.labels_cache.append(label)
+            self.password_cache[label] = plain_password
             print(self.labels_cache)
         except sqlite3.IntegrityError:
             print(f"Error: A password with label '{label}' already exists.")
@@ -87,6 +104,7 @@ class DatabaseUtilities:
 
             # This usually happens if the master password is not the same. So we rely on that :)
             except InvalidTag:
+                print(self.password_cache)
                 has_errors = True
                 message = MESSAGES.MASTER_PASSWORD_NOT_THE_SAME
 
@@ -178,3 +196,5 @@ class DatabaseUtilities:
             self.password_cache[label] = decrypted_password
 
         print("All passwords have been re-encrypted with the new master password.")
+        print("Password cache has been updated.")
+
