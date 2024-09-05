@@ -204,7 +204,7 @@ class DatabaseUtilities:
         message = f"{MESSAGES.EXPORTED_DATA_SUCCESSFULLY} to \n\n{file_path}"
 
         try:
-            # Fetch all labels from the database
+            # Fetch all data from the database
             conn = sqlite3.connect(self.db_name)
             cursor = conn.cursor()
             cursor.execute(Queries.load_all_passwords)
