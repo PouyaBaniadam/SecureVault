@@ -3,6 +3,7 @@ import sqlite3
 from cryptography.exceptions import InvalidTag
 
 from database.queries import Queries
+from encyption.utilities import EncryptionUtils
 from statics.messages import MESSAGES
 
 
@@ -13,8 +14,8 @@ class DatabaseUtilities:
         """
         self.db_name = db_name
         self.encryption_util = encryption_utilities
-        self.labels_cache = []  # List to cache labels
-        self.password_cache = {}  # Optional: Dictionary to cache recently accessed passwords
+        self.labels_cache = []  # Cache for labels
+        self.password_cache = {}  # Cache for passwords
         self._initialize_database()
         self._load_all_labels()  # Load all labels on initialization
 
@@ -22,7 +23,6 @@ class DatabaseUtilities:
         """Create the database and the passwords table if it doesn't exist."""
         conn = sqlite3.connect(self.db_name)
         cursor = conn.cursor()
-        # Make sure your table definition includes a field for 'salt'
         cursor.execute(Queries.create_password_table)
         conn.commit()
         conn.close()
@@ -34,9 +34,12 @@ class DatabaseUtilities:
         cursor.execute(Queries.load_labels)
         rows = cursor.fetchall()
         conn.close()
-
-        # Populate the labels cache
         self.labels_cache = [row[0] for row in rows]
+
+    def clear_cache(self):
+        """Clear all caches when the master password is changed."""
+        self.labels_cache = []
+        self.password_cache = {}
 
     def add_password(self, label, plain_password):
         """Encrypt and add a password to the database and update the labels cache."""
@@ -129,3 +132,57 @@ class DatabaseUtilities:
     def get_all_labels(self):
         """Return all labels from the in-memory cache."""
         return self.list_labels()
+
+    def reencrypt_passwords(self, old_master_password, new_master_password):
+        """
+        Re-encrypt all stored passwords with the new master password.
+
+        :param old_master_password: The current master password.
+        :param new_master_password: The new master password.
+        :return: None
+        """
+
+        old_encryption_util = EncryptionUtils(old_master_password)
+        new_encryption_util = EncryptionUtils(new_master_password)
+
+        for label in self.labels_cache:
+            # Retrieve the encrypted data for the given label
+            conn = sqlite3.connect(self.db_name)
+            cursor = conn.cursor()
+            cursor.execute(Queries.retrieve_password, (label,))
+            row = cursor.fetchone()
+            conn.close()
+
+            if not row:
+                continue
+
+            encrypted_password, nonce, tag, salt = row
+
+            # Decrypt the password using the old master password
+            try:
+                decrypted_password = old_encryption_util.decrypt_password(
+                    encrypted_password, nonce, tag, salt
+                )
+
+            except InvalidTag:
+                print(f"Failed to decrypt password for label '{label}' with the old master password.")
+                continue
+
+            # Encrypt the password using the new master password
+            new_encrypted_password, new_nonce, new_tag, new_salt = new_encryption_util.encrypt_password(
+                decrypted_password)
+
+            # Update the database with the newly encrypted password
+            conn = sqlite3.connect(self.db_name)
+            cursor = conn.cursor()
+            cursor.execute(
+                Queries.update_password,
+                (new_encrypted_password, new_nonce, new_tag, new_salt, label)
+            )
+            conn.commit()
+            conn.close()
+
+            # Update the cache with the newly encrypted password
+            self.password_cache[label] = decrypted_password
+
+        print("All passwords have been re-encrypted with the new master password.")

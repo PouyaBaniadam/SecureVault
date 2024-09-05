@@ -158,7 +158,6 @@ class PasswordUtilities:
         :param confirm_new_master_password: user input for confirm new master password
         :return: has_errors and message
         """
-
         message = ""
         has_errors = False
 
@@ -168,22 +167,45 @@ class PasswordUtilities:
             message = MESSAGES.CURRENT_PASSWORD_EMPTY
             has_errors = True
 
-        if not new_master_password:
+        elif not new_master_password:
             message = MESSAGES.NEW_PASSWORD_EMPTY
             has_errors = True
 
-        if not confirm_new_master_password:
+        elif not confirm_new_master_password:
             message = MESSAGES.CONFIRM_PASSWORD_EMPTY
             has_errors = True
 
         # Check if current password matches the stored master password
-        if current_master_password != master_password:
+        elif current_master_password != master_password:
             message = MESSAGES.CURRENT_PASSWORD_INCORRECT
             has_errors = True
 
         # Check if the new password and confirm password match
-        if new_master_password != confirm_new_master_password:
+        elif new_master_password != confirm_new_master_password:
             message = MESSAGES.PASSWORDS_DO_NOT_MATCH
             has_errors = True
 
         return has_errors, message
+
+    def change_master_password(self, current_master_password, new_master_password, confirm_new_master_password):
+        """
+        Change the master password and re-encrypt all stored passwords.
+
+        :param current_master_password: The current master password.
+        :param new_master_password: The new master password.
+        :param confirm_new_master_password: The confirmation for the new master password.
+        :return: has_errors and message.
+        """
+        # First, validate the inputs
+        has_errors, message = self.validate_master_password_update(
+            current_master_password, new_master_password, confirm_new_master_password
+        )
+
+        if has_errors:
+            return has_errors, message
+
+        # If no validation errors, proceed to change the master password
+        self.password_manager.reencrypt_passwords(current_master_password, new_master_password)
+        self.save_master_password(new_master_password)
+
+        return False, MESSAGES.PASSWORD_UPDATE_SUCCESS

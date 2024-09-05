@@ -227,4 +227,14 @@ class MasterPasswordDialog(QDialog):
             show_message_box(self, title=MESSAGES.ERROR, icon_type=QMessageBox.Critical, message=message)
 
         else:
-            show_message_box(self, title=MESSAGES.SUCCESS, icon_type=QMessageBox.Information, message=message)
+            has_errors, message = self.password_utilities.change_master_password(
+                current_master_password=current_password,
+                new_master_password=new_password,
+                confirm_new_master_password=confirm_password
+            )
+
+            if not has_errors:
+                show_message_box(self, title=MESSAGES.SUCCESS, icon_type=QMessageBox.Information, message=message)
+
+            else:
+                show_message_box(self, title=MESSAGES.ERROR, icon_type=QMessageBox.Critical, message=message)

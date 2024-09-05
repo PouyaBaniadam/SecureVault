@@ -22,6 +22,7 @@ if __name__ == "__main__":
 
     # Master password loader
     master_password = PasswordUtilities.get_master_password()
+    print(master_password)
 
     # Initializations
     encryption_utilities = EncryptionUtils(master_password=master_password)
