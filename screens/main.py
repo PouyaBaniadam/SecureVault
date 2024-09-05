@@ -1,8 +1,9 @@
-from PySide6.QtCore import Qt, QRect, QEvent
+from PySide6.QtCore import QEvent
 from PySide6.QtGui import QIcon, QPixmap
-from PySide6.QtWidgets import QMainWindow, QLabel, QListWidget, QListWidgetItem, QMessageBox, QFileDialog
+from PySide6.QtWidgets import QMainWindow, QLabel, QListWidgetItem, QMessageBox, QFileDialog
 
 from generator.assets import Assets
+from list_view import ListWidget
 from notification.utilities import show_message_box
 from screens.add_password import AddPasswordDialog
 from screens.master_password_dialog import MasterPasswordDialog
@@ -35,7 +36,6 @@ class SecureVault(QMainWindow):
 
         self.set_background_image()
         self.load_base_widgets()
-        self.create_search_results_widget()
 
         # Connect the search input textChanged signal to perform_search
         self.search_input.textChanged.connect(self.perform_search)
@@ -128,25 +128,18 @@ class SecureVault(QMainWindow):
             color=SETTINGS.LIGHT_COLOR,
         )
 
-    def create_search_results_widget(self):
-        # Create a QListWidget for search results
-        self.results_list = QListWidget(self)
-        self.results_list.setGeometry(QRect(30, 100, 300, 200))
-        self.results_list.setStyleSheet("""
-            QListWidget {
-                background-color: %s;
-                color: %s;
-                border: 1px solid %s;
-                border-radius: 8px;
-            }
-            QListWidget::item {
-                padding: 10px;
-            }
-        """ % (SETTINGS.DARK_COLOR, SETTINGS.LIGHT_COLOR, SETTINGS.PRIMARY_COLOR))
-
-        self.results_list.hide()  # Hide the results list initially
-        self.results_list.setFocusPolicy(Qt.NoFocus)
-        self.results_list.setSpacing(1)
+        self.results_list = ListWidget(
+            parent=self,
+            x=30,
+            y=100,
+            w= 300,
+            h=200,
+            color=SETTINGS.LIGHT_COLOR,
+            border_color=SETTINGS.PRIMARY_COLOR,
+            background_color=SETTINGS.DARK_COLOR,
+            border_radius=10,
+            padding=10,
+        )
 
         self.results_list.itemClicked.connect(self.on_result_item_clicked)
 
