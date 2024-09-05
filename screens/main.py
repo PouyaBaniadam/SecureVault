@@ -1,6 +1,6 @@
 from PySide6.QtCore import Qt, QRect, QEvent
 from PySide6.QtGui import QIcon, QPixmap
-from PySide6.QtWidgets import QMainWindow, QLabel, QListWidget, QListWidgetItem, QMessageBox
+from PySide6.QtWidgets import QMainWindow, QLabel, QListWidget, QListWidgetItem, QMessageBox, QFileDialog
 
 from generator.assets import Assets
 from notification.utilities import show_message_box
@@ -103,6 +103,7 @@ class SecureVault(QMainWindow):
             parent=self,
             text=MESSAGES.EXPORT_DATA,
             icon_path=Assets.export_png,
+            on_click=self.export_data,
             x=245,
             y=450,
             w=140,
@@ -206,3 +207,27 @@ class SecureVault(QMainWindow):
     def show_master_password_dialog(self):
         dialog = MasterPasswordDialog(self)
         dialog.exec()
+
+    def export_data(self):
+        """
+        Handle exporting data to a JSON file.
+        """
+        # Open a file dialog to select the export location
+        file_path, _ = QFileDialog.getSaveFileName(
+            self,
+            "Export Data",
+            "",
+            "JSON Files (*.json);;All Files (*)"
+        )
+
+        if file_path:
+            if not file_path.lower().endswith('.json'):
+                file_path += '.json'
+
+            has_errors, message = self.database_utilities.export_data(file_path)
+
+            if has_errors:
+                show_message_box(self, title=MESSAGES.ERROR, icon_type=QMessageBox.Critical, message=message)
+
+            else:
+                show_message_box(self, title=MESSAGES.SUCCESS, icon_type=QMessageBox.Information, message=message)

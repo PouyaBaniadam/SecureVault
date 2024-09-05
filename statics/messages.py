@@ -43,6 +43,7 @@ You do not have access to any of your previous passwords until you give me the p
     CONFIRM_PASSWORD_EMPTY = "Confirmation password is empty."
     NEW_PASSWORD_EMPTY = "New password is empty."
     CURRENT_PASSWORD_EMPTY = "Current master password is empty."
+    EXPORTED_DATA_SUCCESSFULLY = "All passwords have been exported as a JSON file"
 
     @staticmethod
     def field_is_required(field):

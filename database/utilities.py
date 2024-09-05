@@ -1,3 +1,5 @@
+import base64
+import json
 import sqlite3
 
 from cryptography.exceptions import InvalidTag
@@ -198,3 +200,37 @@ class DatabaseUtilities:
         print("All passwords have been re-encrypted with the new master password.")
         print("Password cache has been updated.")
 
+    def export_data(self, file_path):
+        """
+        Export encrypted passwords and their metadata to a JSON file.
+        :param file_path: The path where the JSON file will be saved.
+        """
+        has_errors = False
+        message = f"{MESSAGES.EXPORTED_DATA_SUCCESSFULLY} to \n\n{file_path}"
+
+        try:
+            # Fetch all labels from the database
+            conn = sqlite3.connect(self.db_name)
+            cursor = conn.cursor()
+            cursor.execute(Queries.load_all_passwords)
+            rows = cursor.fetchall()
+            conn.close()
+
+            data = []
+            for label, encrypted_password, nonce, tag, salt in rows:
+                data.append({
+                    'label': label,
+                    'encrypted_password': base64.b64encode(encrypted_password).decode('utf-8'),
+                    'nonce': base64.b64encode(nonce).decode('utf-8'),
+                    'tag': base64.b64encode(tag).decode('utf-8'),
+                    'salt': base64.b64encode(salt).decode('utf-8')
+                })
+
+            with open(file_path, 'w') as json_file:
+                json.dump(data, json_file, indent=4)
+
+        except Exception as e:
+            has_errors = True
+            message = e
+
+        return has_errors, message
