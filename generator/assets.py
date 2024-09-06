@@ -20,6 +20,7 @@ class Assets:
 		cls.loader_gif = cls.resource_path("loader.gif")
 		cls.lock_ico = cls.resource_path("lock.ico")
 		cls.lock_png = cls.resource_path("lock.png")
+		cls.master_key_png = cls.resource_path("master_key.png")
 		cls.padlock_png = cls.resource_path("padlock.png")
 		cls.search_password_png = cls.resource_path("search_password.png")
 		cls.tags_png = cls.resource_path("tags.png")

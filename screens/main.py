@@ -116,7 +116,7 @@ class SecureVault(QMainWindow):
 
         self.master_password_button = TextIconButton(
             parent=self,
-            icon_path=Assets.lock_png,
+            icon_path=Assets.master_key_png,
             text=MESSAGES.UPDATE_MASTER_PASSWORD,
             x=85,
             y=380,
