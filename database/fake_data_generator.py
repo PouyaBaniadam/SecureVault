@@ -24,7 +24,6 @@ def generate_random_label():
     return secrets.token_hex(8)  # Generate a random hex string of length 16 (8 bytes)
 
 
-# Insert 10,000 random records into the database
 for _ in range(NUM_RECORDS):
     label = generate_random_label()
     encrypted_password = generate_random_bytes(32)
