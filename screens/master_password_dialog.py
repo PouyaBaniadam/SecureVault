@@ -23,7 +23,7 @@ class MasterPasswordDialog(QDialog):
         self.generate_password_button = None
         self.new_password_input = None
         self.new_password_label = None
-        self.old_password_input = None
+        self.current_password_input = None
         self.old_password_label = None
         self.icon_label = None
         self.submit_button = None
@@ -55,7 +55,7 @@ class MasterPasswordDialog(QDialog):
             color=SETTINGS.LIGHT_COLOR,
         )
 
-        self.old_password_input = TextInput(
+        self.current_password_input = TextInput(
             parent=self,
             placeholder_text=MESSAGES.ENTER_CURRENT_PASSWORD,
             x=20,
@@ -213,7 +213,7 @@ class MasterPasswordDialog(QDialog):
         Validates the inputs and saves the data if everything is correct.
         """
 
-        current_password = self.old_password_input.text()
+        current_password = self.current_password_input.text()
         new_password = self.new_password_input.text()
         confirm_password = self.confirm_password_input.text()
 
@@ -233,8 +233,10 @@ class MasterPasswordDialog(QDialog):
                 confirm_new_master_password=confirm_password
             )
 
-            if not has_errors:
-                show_message_box(self, title=MESSAGES.SUCCESS, icon_type=QMessageBox.Information, message=message)
+            if has_errors:
+                show_message_box(self, title=MESSAGES.ERROR, icon_type=QMessageBox.Critical, message=message)
 
             else:
-                show_message_box(self, title=MESSAGES.ERROR, icon_type=QMessageBox.Critical, message=message)
+                self.close()
+
+                show_message_box(self, title=MESSAGES.SUCCESS, icon_type=QMessageBox.Information, message=message)

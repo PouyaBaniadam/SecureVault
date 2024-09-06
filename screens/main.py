@@ -3,7 +3,7 @@ from PySide6.QtGui import QIcon, QPixmap
 from PySide6.QtWidgets import QMainWindow, QLabel, QListWidgetItem, QMessageBox, QFileDialog
 
 from generator.assets import Assets
-from list_view import ListWidget
+from themes.lists.list_view import ListWidget
 from notification.utilities import show_message_box
 from screens.add_password import AddPasswordDialog
 from screens.master_password_dialog import MasterPasswordDialog

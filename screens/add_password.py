@@ -171,8 +171,8 @@ class AddPasswordDialog(QDialog):
             show_message_box(self, title=MESSAGES.ERROR, icon_type=QMessageBox.Critical, message=message)
 
         else:
+            self.reset_inputs()
             show_message_box(self, title=MESSAGES.SUCCESS, icon_type=QMessageBox.Information, message=message)
-
 
     def generate_password(self):
         generated_password = self.password_utilities.generate_random_code(
@@ -181,3 +181,9 @@ class AddPasswordDialog(QDialog):
         )
 
         self.input_password.setText(generated_password)
+
+    def reset_inputs(self):
+        self.input_label.clear()
+        self.input_password.clear()
+        self.label_status.setText("")
+        self.password_status.setText("")
