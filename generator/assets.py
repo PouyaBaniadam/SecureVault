@@ -17,6 +17,7 @@ class Assets:
 		cls.export_png = cls.resource_path("export.png")
 		cls.generate_password_png = cls.resource_path("generate_password.png")
 		cls.import_png = cls.resource_path("import.png")
+		cls.loader_gif = cls.resource_path("loader.gif")
 		cls.lock_ico = cls.resource_path("lock.ico")
 		cls.lock_png = cls.resource_path("lock.png")
 		cls.padlock_png = cls.resource_path("padlock.png")

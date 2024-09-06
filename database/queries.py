@@ -30,6 +30,10 @@ class Queries:
     load_all_passwords = """
     SELECT label, encrypted_password, nonce, tag, salt
     FROM passwords;
-    """
+"""
 
     delete_password_table = """DELETE FROM passwords"""
+
+    insert_or_ignore_passwords = """
+    INSERT OR IGNORE INTO passwords (label, encrypted_password, nonce, tag, salt) VALUES (?, ?, ?, ?, ?)
+"""
