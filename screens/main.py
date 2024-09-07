@@ -152,8 +152,8 @@ class SecureVault(QMainWindow):
             icon_path=Assets.trash_png,
             x=175,
             y=275,
-            w=SETTINGS.ICON_SIZE / 1,
-            h=SETTINGS.ICON_SIZE / 1,
+            w=SETTINGS.ICON_SIZE / 1.1,
+            h=SETTINGS.ICON_SIZE / 1.1,
             on_click=self.delete_everything,
         )
 
@@ -170,9 +170,9 @@ class SecureVault(QMainWindow):
         circular_status.move(100, 150)
         circular_status.show()
 
-    @staticmethod
-    def get_total_passwords() -> str:
-        return f"Total passwords : 100"
+
+    def get_total_passwords(self) -> str:
+        return f"Total passwords : {len(self.database_utilities.labels_cache)}"
 
     def perform_search(self):
         """

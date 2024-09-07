@@ -51,6 +51,7 @@ You do not have access to any of your previous passwords until you give me the p
     DELETES_SUCCESSFULLY = "Everything deleted successfully."
     DELETION_CONFIRMATION_MESSAGE = "Are you sure you want to delete everything?"
     DATA_IS_VALID = "Data validated successfully."
+    APP_RESTARTS_NOW = "The application will now restart."
 
     @staticmethod
     def field_is_required(field):

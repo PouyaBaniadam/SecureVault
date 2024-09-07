@@ -4,7 +4,7 @@ from PySide6.QtGui import QFontDatabase, QFont
 from PySide6.QtWidgets import QApplication
 
 from database.utilities import DatabaseUtilities
-from encyption.utilities import EncryptionUtils
+from encyption.utilities import EncryptionUtilities
 from generator.assets import Assets
 from password.utilities import PasswordUtilities
 from screens.main import SecureVault
@@ -24,7 +24,7 @@ if __name__ == "__main__":
     master_password = PasswordUtilities.get_master_password()
 
     # Initializations
-    encryption_utilities = EncryptionUtils(master_password=master_password)
+    encryption_utilities = EncryptionUtilities(master_password=master_password)
     database_utilities = DatabaseUtilities(db_name=SETTINGS.DB_NAME, encryption_utilities=encryption_utilities)
 
     # Page loading

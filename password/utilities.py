@@ -6,7 +6,7 @@ import keyring
 import pyperclip
 
 from database.utilities import DatabaseUtilities
-from encyption.utilities import EncryptionUtils
+from encyption.utilities import EncryptionUtilities
 from statics.messages import MESSAGES
 from statics.options import OPTIONS
 from statics.settings import SETTINGS
@@ -21,7 +21,7 @@ class PasswordUtilities:
         self.master_password = self.get_master_password()
 
         # Initialize encryption utilities with the master password
-        self.encryption_util = EncryptionUtils(master_password=self.master_password)
+        self.encryption_util = EncryptionUtilities(master_password=self.master_password)
 
         # Initialize password manager
         self.password_manager = DatabaseUtilities(db_name, self.encryption_util)

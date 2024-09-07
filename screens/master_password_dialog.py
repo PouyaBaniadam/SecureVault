@@ -1,6 +1,7 @@
 from PySide6.QtWidgets import QDialog, QMessageBox
 
 from database.utilities import DatabaseUtilities
+from encyption.utilities import EncryptionUtilities
 from generator.assets import Assets
 from notification.utilities import show_message_box
 from password.utilities import PasswordUtilities
@@ -271,6 +272,13 @@ class CheckMaterPasswordDialog(QDialog):
         self.setFixedSize(400, 200)
 
         self.password_utilities = PasswordUtilities()
+        self.encryption_utilities = EncryptionUtilities(
+            master_password=SETTINGS.MASTER_PASSWORD
+        )
+        self.database_utilities = DatabaseUtilities(
+            db_name=SETTINGS.DB_NAME,
+            encryption_utilities=self.encryption_utilities
+        )
 
         self.load_base_widgets()
 
@@ -356,5 +364,4 @@ class CheckMaterPasswordDialog(QDialog):
 
         else:
             PasswordUtilities.delete_master_password()
-
-            DatabaseUtilities.delete_database(parent=self, path=SETTINGS.DB_NAME)
+            self.database_utilities.delete_database(parent=self, path=SETTINGS.DB_NAME)

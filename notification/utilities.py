@@ -16,6 +16,8 @@ def show_message_box(parent, title, message, icon_type):
     msg_box.setIcon(icon_type)
     msg_box.exec()
 
+    return QMessageBox.Ok
+
 
 def show_confirmation_dialog(parent, message: str) -> bool:
     """

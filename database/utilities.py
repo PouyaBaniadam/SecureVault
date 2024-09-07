@@ -7,7 +7,8 @@ from PySide6.QtWidgets import QMessageBox
 from cryptography.exceptions import InvalidTag
 
 from database.queries import Queries
-from encyption.utilities import EncryptionUtils
+from encyption.utilities import EncryptionUtilities
+from general.utilities import restart_application
 from notification.utilities import show_message_box
 from statics.messages import MESSAGES
 
@@ -139,8 +140,8 @@ class DatabaseUtilities:
         :return: None
         """
 
-        old_encryption_util = EncryptionUtils(old_master_password)
-        new_encryption_util = EncryptionUtils(new_master_password)
+        old_encryption_util = EncryptionUtilities(old_master_password)
+        new_encryption_util = EncryptionUtilities(new_master_password)
 
         for label in self.labels_cache:
             # Retrieve the encrypted data for the given label
@@ -276,10 +277,6 @@ class DatabaseUtilities:
     @staticmethod
     def delete_database(parent, path):
         os.remove(path=path)
-        show_message_box(
-            parent=parent,
-            title=MESSAGES.SUCCESS,
-            icon_type=QMessageBox.Information,
-            message=MESSAGES.DELETES_SUCCESSFULLY
-        )
         parent.close()
+
+        restart_application(parent=parent)

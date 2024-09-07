@@ -4,7 +4,7 @@ from cryptography.hazmat.primitives import hashes
 from cryptography.hazmat.primitives.ciphers import Cipher, algorithms, modes
 from cryptography.hazmat.primitives.kdf.pbkdf2 import PBKDF2HMAC
 
-class EncryptionUtils:
+class EncryptionUtilities:
     def __init__(self, master_password, salt=None):
         """
         Initialize the EncryptionUtils class with a master password.
