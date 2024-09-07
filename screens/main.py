@@ -61,7 +61,7 @@ class SecureVault(QMainWindow):
             placeholder_text=MESSAGES.SEARCH_LABEL,
             x=30,
             y=70,
-            w=300,
+            w=330,
             h=30,
             background_color=SETTINGS.DARK_COLOR,
             color=SETTINGS.LIGHT_COLOR,
@@ -69,17 +69,6 @@ class SecureVault(QMainWindow):
             border_radius=SETTINGS.BUTTON_BORDER_RADIUS,
             padding=5,
             selection_background_color=SETTINGS.PRIMARY_COLOR
-        )
-
-        self.search_button = IconButton(
-            parent=self,
-            icon_path=Assets.search_password_png,
-            x=335,
-            y=60,
-            w=SETTINGS.ICON_SIZE,
-            h=SETTINGS.ICON_SIZE,
-            background_color=SETTINGS.PRIMARY_COLOR,
-            color=SETTINGS.DARK_COLOR,
         )
 
         self.add_password = IconButton(
@@ -150,10 +139,10 @@ class SecureVault(QMainWindow):
         self.trash_button = IconButton(
             parent=self,
             icon_path=Assets.trash_png,
-            x=175,
-            y=275,
-            w=SETTINGS.ICON_SIZE / 1.1,
-            h=SETTINGS.ICON_SIZE / 1.1,
+            x=180,
+            y=290,
+            w=SETTINGS.ICON_SIZE / 1.2,
+            h=SETTINGS.ICON_SIZE / 1.2,
             on_click=self.delete_everything,
         )
 
