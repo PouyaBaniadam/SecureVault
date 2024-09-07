@@ -282,3 +282,4 @@ class DatabaseUtilities:
             icon_type=QMessageBox.Information,
             message=MESSAGES.DELETES_SUCCESSFULLY
         )
+        parent.close()

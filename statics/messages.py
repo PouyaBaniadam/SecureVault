@@ -14,11 +14,13 @@ class MESSAGES:
     KEYRING_USERNAME = "user_master_password"
     SETUP_MASTER_PASSWORD = "Setup Master Password"
     UPDATE_MASTER_PASSWORD = "Update Master Password"
+    VALIDATE_MASTER_PASSWORD = "Validate Master Password"
     CURRENT_MASTER_PASSWORD = "Current Master Password"
     NEW_MASTER_PASSWORD = "New master password"
     ENTER_CURRENT_PASSWORD = "Enter current password"
     ENTER_NEW_PASSWORD = "Enter new password"
     CONFIRM_NEW_PASSWORD = "Confirm new password"
+    CONFIRM_MASTER_PASSWORD = "Confirm master password"
     RE_ENTER_NEW_PASSWORD = "Re-enter new password"
     SETUP_MASTER_INFO = """Enter a strong master password for the first time
 
@@ -40,6 +42,7 @@ You do not have access to any of your previous passwords until you give me the p
     PASSWORDS_DO_NOT_MATCH = "Passwords do not match."
     PASSWORD_UPDATE_SUCCESS = "Password updated successfully."
     CURRENT_PASSWORD_INCORRECT = "Current master password is incorrect."
+    CONFIRM_PASSWORD_INCORRECT = "Confirm master password is incorrect."
     CONFIRM_PASSWORD_EMPTY = "Confirmation password is empty."
     NEW_PASSWORD_EMPTY = "New password is empty."
     CURRENT_PASSWORD_EMPTY = "Current master password is empty."
@@ -47,6 +50,7 @@ You do not have access to any of your previous passwords until you give me the p
     IMPORTED_DATA_SUCCESSFULLY = "Data imported successfully from JSON file."
     DELETES_SUCCESSFULLY = "Everything deleted successfully."
     DELETION_CONFIRMATION_MESSAGE = "Are you sure you want to delete everything?"
+    DATA_IS_VALID = "Data validated successfully."
 
     @staticmethod
     def field_is_required(field):

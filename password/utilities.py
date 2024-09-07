@@ -149,7 +149,7 @@ class PasswordUtilities:
         """
         keyring.set_password(MESSAGES.APP_NAME, MESSAGES.KEYRING_USERNAME, master_password)
 
-    def validate_master_password_update(self, current_master_password, new_master_password: str,
+    def validate_master_password_update(self, current_master_password: str, new_master_password: str,
                                         confirm_new_master_password: str):
         """
         This function is for validating new master password.
@@ -209,3 +209,21 @@ class PasswordUtilities:
         self.save_master_password(new_master_password)
 
         return False, MESSAGES.PASSWORD_UPDATE_SUCCESS
+
+
+    def validate_master_password(self, confirm_master_password):
+        """
+        Checks if the master password is correct or not.
+        :param confirm_master_password:
+        """
+
+        message = MESSAGES.DATA_IS_VALID
+        has_errors = False
+
+        current_master_password = self.get_master_password()
+
+        if confirm_master_password != current_master_password:
+            has_errors = True
+            message = MESSAGES.CONFIRM_PASSWORD_INCORRECT
+
+        return has_errors, message

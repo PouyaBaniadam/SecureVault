@@ -5,9 +5,8 @@ from PySide6.QtWidgets import QMainWindow, QLabel, QListWidgetItem, QMessageBox,
 from database.utilities import DatabaseUtilities
 from generator.assets import Assets
 from notification.utilities import show_message_box, show_confirmation_dialog
-from password.utilities import PasswordUtilities
 from screens.add_password import AddPasswordDialog
-from screens.master_password_dialog import MasterPasswordDialog
+from screens.master_password_dialog import UpdateMasterPasswordDialog, CheckMaterPasswordDialog
 from screens.password_detail import PasswordDetailsDialog
 from statics.messages import MESSAGES
 from statics.settings import SETTINGS
@@ -151,10 +150,10 @@ class SecureVault(QMainWindow):
         self.trash_button = IconButton(
             parent=self,
             icon_path=Assets.trash_png,
-            x=180,
+            x=175,
             y=275,
-            w=SETTINGS.ICON_SIZE / 1.1,
-            h=SETTINGS.ICON_SIZE / 1.1,
+            w=SETTINGS.ICON_SIZE / 1,
+            h=SETTINGS.ICON_SIZE / 1,
             on_click=self.delete_everything,
         )
 
@@ -236,7 +235,7 @@ class SecureVault(QMainWindow):
         dialog.exec()
 
     def show_master_password_dialog(self):
-        dialog = MasterPasswordDialog(self)
+        dialog = UpdateMasterPasswordDialog(self)
         dialog.exec()
 
     def export_data(self):
@@ -304,6 +303,5 @@ class SecureVault(QMainWindow):
         Delete all data after user confirmation.
         """
         if show_confirmation_dialog(parent=self, message=MESSAGES.DELETION_CONFIRMATION_MESSAGE):
-            PasswordUtilities.delete_master_password()
-
-            self.database_utilities.delete_database(parent=self, path=SETTINGS.DB_NAME)
+            dialog = CheckMaterPasswordDialog(self)
+            dialog.exec()

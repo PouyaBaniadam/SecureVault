@@ -1,5 +1,6 @@
 from PySide6.QtWidgets import QDialog, QMessageBox
 
+from database.utilities import DatabaseUtilities
 from generator.assets import Assets
 from notification.utilities import show_message_box
 from password.utilities import PasswordUtilities
@@ -12,7 +13,7 @@ from themes.labels.icon_label import IconLabel
 from themes.labels.text_label import TextLabel
 
 
-class MasterPasswordDialog(QDialog):
+class UpdateMasterPasswordDialog(QDialog):
     def __init__(self, parent=None):
         super().__init__(parent)
         self.cancel_button = None
@@ -38,7 +39,7 @@ class MasterPasswordDialog(QDialog):
     def load_base_widgets(self):
         self.icon_label = IconLabel(
             parent=self,
-            icon_path=Assets.lock_png,
+            icon_path=Assets.master_key_png,
             x=10,
             y=20,
             w=SETTINGS.ICON_SIZE / 1.5,
@@ -255,3 +256,105 @@ class MasterPasswordDialog(QDialog):
                     icon_type=QMessageBox.Information,
                     message=message
                 )
+
+
+class CheckMaterPasswordDialog(QDialog):
+    def __init__(self, parent=None):
+        super().__init__(parent)
+        self.confirm_password_input = None
+        self.confirm_password_label = None
+        self.icon_label = None
+        self.submit_button = None
+        self.cancel_button = None
+
+        self.setWindowTitle(MESSAGES.UPDATE_MASTER_PASSWORD)
+        self.setFixedSize(400, 200)
+
+        self.password_utilities = PasswordUtilities()
+
+        self.load_base_widgets()
+
+    def load_base_widgets(self):
+        self.icon_label = IconLabel(
+            parent=self,
+            icon_path=Assets.master_key_png,
+            x=10,
+            y=10,
+            w=SETTINGS.ICON_SIZE / 1.5,
+            h=SETTINGS.ICON_SIZE / 1.5,
+        )
+
+        self.confirm_password_label = TextLabel(
+            parent=self,
+            text=f"{MESSAGES.CONFIRM_MASTER_PASSWORD} : ",
+            x=20,
+            y=60,
+            w=360,
+            h=30,
+            color=SETTINGS.LIGHT_COLOR,
+        )
+
+        self.confirm_password_input = TextInput(
+            parent=self,
+            placeholder_text=MESSAGES.ENTER_CURRENT_PASSWORD,
+            x=20,
+            y=90,
+            w=360,
+            h=30,
+            background_color=SETTINGS.DARK_COLOR,
+            color=SETTINGS.LIGHT_COLOR,
+            border_color=SETTINGS.PRIMARY_COLOR,
+            border_radius=SETTINGS.BUTTON_BORDER_RADIUS,
+            padding=5,
+            selection_background_color=SETTINGS.PRIMARY_COLOR
+        )
+
+        self.submit_button = TextButton(
+            parent=self,
+            text=MESSAGES.SUBMIT,
+            x=100,
+            y=150,
+            w=100,
+            h=30,
+            on_click=self.validate_and_save,
+            background_color=SETTINGS.PRIMARY_COLOR,
+            color=SETTINGS.LIGHT_COLOR,
+            border_radius=SETTINGS.BUTTON_BORDER_RADIUS,
+        )
+
+        self.cancel_button = TextButton(
+            parent=self,
+            text=MESSAGES.CANCEL,
+            x=220,
+            y=150,
+            w=100,
+            h=30,
+            on_click=self.close,
+            background_color=SETTINGS.PRIMARY_COLOR,
+            color=SETTINGS.LIGHT_COLOR,
+            border_radius=SETTINGS.BUTTON_BORDER_RADIUS,
+        )
+
+    def validate_and_save(self):
+        """
+        Validates the inputs and saves the data if everything is correct.
+        """
+
+        confirm_password = self.confirm_password_input.text()
+
+        has_errors, message = self.password_utilities.validate_master_password(
+            confirm_master_password=confirm_password
+        )
+
+        if has_errors:
+            show_message_box(
+                self,
+                title=MESSAGES.ERROR,
+                icon_type=QMessageBox.Critical,
+                message=message
+            )
+
+        else:
+            PasswordUtilities.delete_master_password()
+
+            DatabaseUtilities.delete_database(parent=self, path=SETTINGS.DB_NAME)
