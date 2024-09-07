@@ -24,6 +24,7 @@ class Assets:
 		cls.padlock_png = cls.resource_path("padlock.png")
 		cls.search_password_png = cls.resource_path("search_password.png")
 		cls.tags_png = cls.resource_path("tags.png")
+		cls.trash_png = cls.resource_path("trash.png")
 		cls.ubuntu_ttf = cls.resource_path("ubuntu.ttf")
 		cls.verified_png = cls.resource_path("verified.png")
 

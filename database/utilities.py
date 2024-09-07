@@ -1,11 +1,14 @@
 import base64
 import json
+import os
 import sqlite3
 
+from PySide6.QtWidgets import QMessageBox
 from cryptography.exceptions import InvalidTag
 
 from database.queries import Queries
 from encyption.utilities import EncryptionUtils
+from notification.utilities import show_message_box
 from statics.messages import MESSAGES
 
 
@@ -269,3 +272,13 @@ class DatabaseUtilities:
             message = e
 
         return has_errors, message
+
+    @staticmethod
+    def delete_database(parent, path):
+        os.remove(path=path)
+        show_message_box(
+            parent=parent,
+            title=MESSAGES.SUCCESS,
+            icon_type=QMessageBox.Information,
+            message=MESSAGES.DELETES_SUCCESSFULLY
+        )

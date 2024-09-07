@@ -2,9 +2,10 @@ from PySide6.QtCore import QEvent
 from PySide6.QtGui import QIcon, QPixmap
 from PySide6.QtWidgets import QMainWindow, QLabel, QListWidgetItem, QMessageBox, QFileDialog
 
+from database.utilities import DatabaseUtilities
 from generator.assets import Assets
-from themes.lists.list_view import ListWidget
-from notification.utilities import show_message_box
+from notification.utilities import show_message_box, show_confirmation_dialog
+from password.utilities import PasswordUtilities
 from screens.add_password import AddPasswordDialog
 from screens.master_password_dialog import MasterPasswordDialog
 from screens.password_detail import PasswordDetailsDialog
@@ -13,12 +14,16 @@ from statics.settings import SETTINGS
 from themes.buttons.icon_button import IconButton
 from themes.buttons.text_icon_button import TextIconButton
 from themes.inputs.text_input import TextInput
+from themes.lists.list_view import ListWidget
+from themes.status_bar.circular_status_bar import CircularStatusBar
 
 
 class SecureVault(QMainWindow):
-    def __init__(self, database_utilities):
+    def __init__(self, database_utilities: DatabaseUtilities):
         super().__init__()
 
+        self.trash_button = None
+        self.delete_button = None
         self.master_password_button = None
         self.search_input = None
         self.database_utilities = database_utilities
@@ -35,6 +40,8 @@ class SecureVault(QMainWindow):
         self.setWindowIcon(QIcon(Assets.lock_png))
 
         self.set_background_image()
+
+        self.add_circular_status_bar()
         self.load_base_widgets()
 
         # Connect the search input textChanged signal to perform_search
@@ -132,7 +139,7 @@ class SecureVault(QMainWindow):
             parent=self,
             x=30,
             y=100,
-            w= 300,
+            w=300,
             h=200,
             color=SETTINGS.LIGHT_COLOR,
             border_color=SETTINGS.PRIMARY_COLOR,
@@ -141,7 +148,32 @@ class SecureVault(QMainWindow):
             padding=10,
         )
 
+        self.trash_button = IconButton(
+            parent=self,
+            icon_path=Assets.trash_png,
+            x=180,
+            y=275,
+            w=SETTINGS.ICON_SIZE / 1.1,
+            h=SETTINGS.ICON_SIZE / 1.1,
+            on_click=self.delete_everything,
+        )
+
         self.results_list.itemClicked.connect(self.on_result_item_clicked)
+
+    def add_circular_status_bar(self):
+        """
+        Add a circular status bar to the center of the window.
+        """
+        circular_status = CircularStatusBar(
+            text=self.get_total_passwords(),
+            parent=self
+        )
+        circular_status.move(100, 150)
+        circular_status.show()
+
+    @staticmethod
+    def get_total_passwords() -> str:
+        return f"Total passwords : 100"
 
     def perform_search(self):
         """
@@ -176,7 +208,12 @@ class SecureVault(QMainWindow):
         has_errors, message, decrypted_password = self.database_utilities.retrieve_password(label_text)
 
         if has_errors:
-            show_message_box(self, title=MESSAGES.ERROR, icon_type=QMessageBox.Critical, message=message)
+            show_message_box(
+                self,
+                title=MESSAGES.ERROR,
+                icon_type=QMessageBox.Critical,
+                message=message
+            )
 
 
         else:
@@ -221,10 +258,20 @@ class SecureVault(QMainWindow):
             has_errors, message = self.database_utilities.export_data_to_json(file_path)
 
             if has_errors:
-                show_message_box(self, title=MESSAGES.ERROR, icon_type=QMessageBox.Critical, message=message)
+                show_message_box(
+                    self,
+                    title=MESSAGES.ERROR,
+                    icon_type=QMessageBox.Critical,
+                    message=message
+                )
 
             else:
-                show_message_box(self, title=MESSAGES.SUCCESS, icon_type=QMessageBox.Information, message=message)
+                show_message_box(
+                    self,
+                    title=MESSAGES.SUCCESS,
+                    icon_type=QMessageBox.Information,
+                    message=message
+                )
 
     def import_data(self):
         file_path, _ = QFileDialog.getOpenFileName(
@@ -237,7 +284,26 @@ class SecureVault(QMainWindow):
         if file_path:
             has_errors, message = self.database_utilities.import_data_from_json(file_path)
             if has_errors:
-                show_message_box(self, title=MESSAGES.ERROR, icon_type=QMessageBox.Critical, message=message)
+                show_message_box(
+                    self,
+                    title=MESSAGES.ERROR,
+                    icon_type=QMessageBox.Critical,
+                    message=message
+                )
 
             else:
-                show_message_box(self, title=MESSAGES.SUCCESS, icon_type=QMessageBox.Information, message=message)
+                show_message_box(
+                    self,
+                    title=MESSAGES.SUCCESS,
+                    icon_type=QMessageBox.Information,
+                    message=message
+                )
+
+    def delete_everything(self):
+        """
+        Delete all data after user confirmation.
+        """
+        if show_confirmation_dialog(parent=self, message=MESSAGES.DELETION_CONFIRMATION_MESSAGE):
+            PasswordUtilities.delete_master_password()
+
+            self.database_utilities.delete_database(parent=self, path=SETTINGS.DB_NAME)

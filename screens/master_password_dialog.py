@@ -224,7 +224,12 @@ class MasterPasswordDialog(QDialog):
         )
 
         if has_errors:
-            show_message_box(self, title=MESSAGES.ERROR, icon_type=QMessageBox.Critical, message=message)
+            show_message_box(
+                self,
+                title=MESSAGES.ERROR,
+                icon_type=QMessageBox.Critical,
+                message=message
+            )
 
         else:
             has_errors, message = self.password_utilities.change_master_password(
@@ -234,9 +239,19 @@ class MasterPasswordDialog(QDialog):
             )
 
             if has_errors:
-                show_message_box(self, title=MESSAGES.ERROR, icon_type=QMessageBox.Critical, message=message)
+                show_message_box(
+                    self,
+                    title=MESSAGES.ERROR,
+                    icon_type=QMessageBox.Critical,
+                    message=message
+                )
 
             else:
                 self.close()
 
-                show_message_box(self, title=MESSAGES.SUCCESS, icon_type=QMessageBox.Information, message=message)
+                show_message_box(
+                    self,
+                    title=MESSAGES.SUCCESS,
+                    icon_type=QMessageBox.Information,
+                    message=message
+                )
