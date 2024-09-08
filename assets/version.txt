@@ -15,9 +15,9 @@ VSVersionInfo(
         StringTable(
           '040904B0',
            StringStruct('FileDescription', 'A strong password manager written in Python'),
-           StringStruct('FileVersion', '1.0.0.0'),          # Version number
+           StringStruct('FileVersion', '1.0.0.0'),
            StringStruct('ProductName', 'Your Product Name'),
-           StringStruct('ProductVersion', '1.0.0.0')]       # Product version
+           StringStruct('ProductVersion', '1.0.0.0')]
         )
       ]
     ),
