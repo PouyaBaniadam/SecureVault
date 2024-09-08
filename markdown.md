@@ -1,3 +1,15 @@
+If you want to display an actual image within the markdown, you should use the Markdown syntax for embedding images. Here’s how you can do it:
+
+### Screenshot of the App
+
+![SecureVault App Screenshot](https://github.com/PouyaBaniadam/SecureVault/blob/master/markdown-assets/img.png)
+
+This line will display the image directly in your markdown document, provided that the URL points to an actual image file that is accessible publicly. Just make sure the URL is correct and accessible to everyone who views the markdown file.
+
+Here's the updated section with the embedded image:
+
+---
+
 ## SecureVault: A Modern Password Manager
 
 **SecureVault** is a powerful and secure password manager designed with a sleek and modern UI using **PySide6**. This application provides users with a seamless experience to securely store, manage, and retrieve passwords, all while maintaining high levels of security through advanced encryption techniques.
@@ -27,11 +39,10 @@
 
 ### Screenshot of the App
 
+![SecureVault App Screenshot](https://github.com/PouyaBaniadam/SecureVault/blob/master/markdown-assets/img.png)
 
 ### Conclusion
 
 SecureVault is designed to be a comprehensive solution for securely managing passwords. With its modern UI and advanced security features, it aims to provide users with the best combination of ease of use and robust protection against data breaches.
 
 ---
-
-Feel free to add the URL to the screenshot of your app where indicated!
