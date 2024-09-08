@@ -1,0 +1,26 @@
+VSVersionInfo(
+  ffi=FixedFileInfo(
+    filevers=(1, 0, 0, 0),  # File version (major, minor, build, revision)
+    prodvers=(1, 0, 0, 0),  # Product version
+    mask=0x3f,              # Bitmask for valid fields
+    flags=0x0,              # File flags (usually 0)
+    OS=0x40004,             # Operating system indicator
+    fileType=0x1,           # File type (0x1 for application)
+    subtype=0x0,            # File subtype (usually 0)
+    date=(0, 0)             # File date (can be set to 0)
+  ),
+  kids=[
+    StringFileInfo(
+      [
+        StringTable(
+          '040904B0',
+           StringStruct('FileDescription', 'A strong password manager written in Python'),
+           StringStruct('FileVersion', '1.0.0.0'),          # Version number
+           StringStruct('ProductName', 'Your Product Name'),
+           StringStruct('ProductVersion', '1.0.0.0')]       # Product version
+        )
+      ]
+    ),
+    VarFileInfo([VarStruct('Translation', [1033, 1200])])
+  ]
+)
