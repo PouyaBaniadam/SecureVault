@@ -1,5 +1,3 @@
-If you want to display an actual image within the markdown, you should use the Markdown syntax for embedding images. Here’s how you can do it:
-
 ### Screenshot of the App
 
 ![SecureVault App Screenshot](https://github.com/PouyaBaniadam/SecureVault/blob/master/markdown-assets/img.png)
@@ -36,11 +34,6 @@ Here's the updated section with the embedded image:
 - **Argon2 Hashing**: Uses Argon2, a memory-hard key derivation function to hash the master password, making it resistant to brute-force attacks.
 - **AES-GCM Encryption**: Employs AES in Galois/Counter Mode (GCM) to encrypt passwords with confidentiality and integrity protection.
 - **Dynamic Key Derivation**: Each password encryption uses a unique salt, making it highly secure and difficult to crack.
-
-### Screenshot of the App
-
-![SecureVault App Screenshot](https://github.com/PouyaBaniadam/SecureVault/blob/master/markdown-assets/img.png)
-
 ### Conclusion
 
 SecureVault is designed to be a comprehensive solution for securely managing passwords. With its modern UI and advanced security features, it aims to provide users with the best combination of ease of use and robust protection against data breaches.
