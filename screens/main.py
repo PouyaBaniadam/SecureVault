@@ -309,3 +309,10 @@ class SecureVault(QMainWindow):
         if show_confirmation_dialog(parent=self, message=MESSAGES.DELETION_CONFIRMATION_MESSAGE):
             dialog = CheckMaterPasswordDialog(self)
             dialog.exec()
+
+    def clear_search_input(self):
+        """
+        Clears the search input and hides the results list.
+        """
+        self.search_input.setText("")
+        self.results_list.hide()

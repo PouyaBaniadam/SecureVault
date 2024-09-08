@@ -155,4 +155,7 @@ class PasswordDetailsDialog(QDialog):
                 message=MESSAGES.DELETED_SUCCESSFULLY
             )
 
+            # Clear the search input in the main window (parent) and hide the results list
+            self.parent().clear_search_input()
+
             self.close()
