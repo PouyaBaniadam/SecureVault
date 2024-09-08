@@ -13,14 +13,15 @@ from statics.settings import SETTINGS
 from themes.buttons.icon_button import IconButton
 from themes.buttons.text_icon_button import TextIconButton
 from themes.inputs.text_input import TextInput
+from themes.labels.text_label import TextLabel
 from themes.lists.list_view import ListWidget
-from themes.status_bar.circular_status_bar import CircularStatusBar
 
 
 class SecureVault(QMainWindow):
     def __init__(self, database_utilities: DatabaseUtilities):
         super().__init__()
 
+        self.total_passwords_label = None
         self.trash_button = None
         self.delete_button = None
         self.master_password_button = None
@@ -40,7 +41,6 @@ class SecureVault(QMainWindow):
 
         self.set_background_image()
 
-        self.add_circular_status_bar()
         self.load_base_widgets()
 
         # Connect the search input textChanged signal to perform_search
@@ -56,6 +56,36 @@ class SecureVault(QMainWindow):
         self.bg_label.setScaledContents(True)
 
     def load_base_widgets(self):
+        if len(str(len(self.database_utilities.labels_cache))) == 1:
+            self.total_passwords_label = TextLabel(
+                parent=self,
+                text=f"Total passwords : {len(self.database_utilities.labels_cache)}",
+                x=130,
+                y=230,
+                w=300,
+                h=30
+            )
+
+        if len(str(len(self.database_utilities.labels_cache))) == 2:
+            self.total_passwords_label = TextLabel(
+                parent=self,
+                text=f"Total passwords : {len(self.database_utilities.labels_cache)}",
+                x=125,
+                y=230,
+                w=300,
+                h=30
+            )
+
+        if len(str(len(self.database_utilities.labels_cache))) == 3:
+            self.total_passwords_label = TextLabel(
+                parent=self,
+                text=f"Total passwords : {len(self.database_utilities.labels_cache)}",
+                x=120,
+                y=230,
+                w=300,
+                h=30
+            )
+
         self.search_input = TextInput(
             parent=self,
             placeholder_text=MESSAGES.SEARCH_LABEL,
@@ -139,29 +169,14 @@ class SecureVault(QMainWindow):
         self.trash_button = IconButton(
             parent=self,
             icon_path=Assets.trash_png,
-            x=175,
-            y=275,
+            x=177,
+            y=280,
             w=SETTINGS.ICON_SIZE / 1.1,
             h=SETTINGS.ICON_SIZE / 1.1,
             on_click=self.delete_everything,
         )
 
         self.results_list.itemClicked.connect(self.on_result_item_clicked)
-
-    def add_circular_status_bar(self):
-        """
-        Add a circular status bar to the center of the window.
-        """
-        circular_status = CircularStatusBar(
-            text=self.get_total_passwords(),
-            parent=self
-        )
-        circular_status.move(100, 150)
-        circular_status.show()
-
-
-    def get_total_passwords(self) -> str:
-        return f"Total passwords : {len(self.database_utilities.labels_cache)}"
 
     def perform_search(self):
         """

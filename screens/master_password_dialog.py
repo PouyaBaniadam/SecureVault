@@ -1,4 +1,5 @@
-from PySide6.QtWidgets import QDialog, QMessageBox
+from PySide6.QtGui import QPixmap
+from PySide6.QtWidgets import QDialog, QMessageBox, QLabel
 
 from database.utilities import DatabaseUtilities
 from encyption.utilities import EncryptionUtilities
@@ -17,6 +18,7 @@ from themes.labels.text_label import TextLabel
 class UpdateMasterPasswordDialog(QDialog):
     def __init__(self, parent=None):
         super().__init__(parent)
+        self.bg_label = None
         self.cancel_button = None
         self.confirm_password_status = None
         self.confirm_password_input = None
@@ -33,9 +35,17 @@ class UpdateMasterPasswordDialog(QDialog):
         self.setWindowTitle(MESSAGES.UPDATE_MASTER_PASSWORD)
         self.setFixedSize(400, 350)
 
+        self.set_background_image()
+
         self.password_utilities = PasswordUtilities()
 
         self.load_base_widgets()
+
+    def set_background_image(self):
+        self.bg_label = QLabel(self)
+        self.bg_label.setPixmap(QPixmap(Assets.dialog_background_png))
+        self.bg_label.setGeometry(0, 0, self.width(), self.height())
+        self.bg_label.setScaledContents(True)
 
     def load_base_widgets(self):
         self.icon_label = IconLabel(
@@ -262,6 +272,7 @@ class UpdateMasterPasswordDialog(QDialog):
 class CheckMaterPasswordDialog(QDialog):
     def __init__(self, parent=None):
         super().__init__(parent)
+        self.bg_label = None
         self.confirm_password_input = None
         self.confirm_password_label = None
         self.icon_label = None
@@ -270,6 +281,8 @@ class CheckMaterPasswordDialog(QDialog):
 
         self.setWindowTitle(MESSAGES.UPDATE_MASTER_PASSWORD)
         self.setFixedSize(400, 200)
+
+        self.set_background_image()
 
         self.password_utilities = PasswordUtilities()
         self.encryption_utilities = EncryptionUtilities(
@@ -365,3 +378,9 @@ class CheckMaterPasswordDialog(QDialog):
         else:
             PasswordUtilities.delete_master_password()
             self.database_utilities.delete_database(parent=self, path=SETTINGS.DB_NAME)
+
+    def set_background_image(self):
+        self.bg_label = QLabel(self)
+        self.bg_label.setPixmap(QPixmap(Assets.dialog_background_png))
+        self.bg_label.setGeometry(0, 0, self.width(), self.height())
+        self.bg_label.setScaledContents(True)

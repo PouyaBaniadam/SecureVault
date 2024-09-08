@@ -1,6 +1,7 @@
 import pyperclip
 from PySide6.QtCore import QTimer
-from PySide6.QtWidgets import QDialog
+from PySide6.QtGui import QPixmap
+from PySide6.QtWidgets import QDialog, QLabel
 
 from generator.assets import Assets
 from statics.messages import MESSAGES
@@ -14,6 +15,7 @@ from themes.labels.text_label import TextLabel
 class PasswordDetailsDialog(QDialog):
     def __init__(self, label, password, parent=None):
         super().__init__(parent)
+        self.bg_label = None
         self.password_label = None
         self.copy_password = None
         self.password_icon = None
@@ -23,11 +25,19 @@ class PasswordDetailsDialog(QDialog):
         self.setWindowTitle("Password Details")
         self.setFixedSize(400, 250)
 
+        self.set_background_image()
+
         self.label = label
         self.password = password
 
         self.notification_label = None  # Notification label to show confirmation
         self.load_base_widgets()
+
+    def set_background_image(self):
+        self.bg_label = QLabel(self)
+        self.bg_label.setPixmap(QPixmap(Assets.dialog_background_png))
+        self.bg_label.setGeometry(0, 0, self.width(), self.height())
+        self.bg_label.setScaledContents(True)
 
     def load_base_widgets(self):
         self.tag_icon = IconLabel(

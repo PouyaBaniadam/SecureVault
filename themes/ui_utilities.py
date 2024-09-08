@@ -5,7 +5,6 @@ class UIUtilities:
         self.border_color = None
         self.font_size = None
         self.background_color = None
-        self.background_color = None
         self.color = None
         self.font_weight = None
         self.border_radius = None
@@ -55,9 +54,15 @@ class UIUtilities:
         self.color = kwargs.get("color")
         self.font_weight = kwargs.get("font_weight")
 
-    def load_ListWidget(self, **kwargs):
+    def load_ListWidget(self, **kwargs) -> None:
         self.background_color = kwargs.get('background_color')
         self.color = kwargs.get('color')
         self.border_color = kwargs.get('border_color')
         self.border_radius = kwargs.get('border_radius')
         self.padding = kwargs.get('padding')
+
+    def load_QCheckBoxStyle(self, **kwargs) -> None:
+        self.color = kwargs.get('color')
+        self.font_weight = kwargs.get("font_weight")
+        self.padding = kwargs.get('padding')
+

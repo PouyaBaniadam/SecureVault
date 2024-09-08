@@ -1,5 +1,5 @@
-from PySide6.QtGui import QIcon
-from PySide6.QtWidgets import QMainWindow, QMessageBox
+from PySide6.QtGui import QIcon, QPixmap
+from PySide6.QtWidgets import QMainWindow, QMessageBox, QLabel
 
 from generator.assets import Assets
 from password.utilities import PasswordUtilities
@@ -7,6 +7,7 @@ from screens.main import SecureVault
 from statics.messages import MESSAGES
 from statics.settings import SETTINGS
 from themes.buttons.text_icon_button import TextIconButton
+from themes.check_box.check_box import TextCheckBox
 from themes.inputs.text_input import TextInput
 from themes.labels.text_label import TextLabel
 
@@ -15,14 +16,32 @@ class SetupMasterPasswordPage(QMainWindow):
     def __init__(self, database_utilities):
         super().__init__()
 
+        self.password_status = None
+        self.generate_password_button = None
+        self.input_password = None
+        self.label_status = None
+        self.confirm_button = None
+        self.checkbox_agree = None  # Checkbox to confirm agreement
+        self.bg_label = None
         self.main_window = None
         self.setWindowTitle(MESSAGES.SETUP_MASTER_PASSWORD)
         self.database_utilities = database_utilities
 
-        self.setFixedSize(400, 250)
+        self.setFixedSize(400, 300)
+
+        self.set_background_image()
 
         self.setWindowIcon(QIcon(Assets.lock_png))
 
+        self.load_base_widgets()
+
+    def set_background_image(self):
+        self.bg_label = QLabel(self)
+        self.bg_label.setPixmap(QPixmap(Assets.dialog_background_png))
+        self.bg_label.setGeometry(0, 0, self.width(), self.height())
+        self.bg_label.setScaledContents(True)
+
+    def load_base_widgets(self):
         self.label_status = TextLabel(
             parent=self,
             text=MESSAGES.SETUP_MASTER_INFO,
@@ -32,7 +51,6 @@ class SetupMasterPasswordPage(QMainWindow):
             h=150,
         )
 
-        # Input field for password
         self.input_password = TextInput(
             parent=self,
             placeholder_text=MESSAGES.enter_field(field="password"),
@@ -71,19 +89,34 @@ class SetupMasterPasswordPage(QMainWindow):
             h=20,
         )
 
+        # Custom checkbox to agree before enabling the confirm button
+        self.checkbox_agree = TextCheckBox(
+            parent=self,
+            text=MESSAGES.AGREE_TERMS,
+            x=20,
+            y=210,
+            w=200,
+            h=30,
+            color=SETTINGS.LIGHT_COLOR,
+        )
+        self.checkbox_agree.stateChanged.connect(self.on_checkbox_state_changed)
+
         self.confirm_button = TextIconButton(
             parent=self,
             text=MESSAGES.CONFIRM,
             icon_path=Assets.verified_png,
-            on_click=lambda : self.save_password(self.input_password.text()),
+            on_click=lambda: self.save_password(self.input_password.text()),
             x=130,
-            y=210,
+            y=250,
             w=120,
             h=SETTINGS.BUTTON_HEIGHT,
             border_radius=SETTINGS.BUTTON_BORDER_RADIUS,
             background_color=SETTINGS.PRIMARY_COLOR,
             color=SETTINGS.LIGHT_COLOR,
+            checkbox_color=SETTINGS.PRIMARY_COLOR,
+            border_color=SETTINGS.LIGHT_COLOR,
         )
+        self.confirm_button.setEnabled(False)
 
         self.input_password.textChanged.connect(self.on_input_password_changed)
 
@@ -93,12 +126,17 @@ class SetupMasterPasswordPage(QMainWindow):
         """
         password = self.input_password.text()
 
-        # Determine password strength
         strength, color = PasswordUtilities.evaluate_password_strength(password)
 
         # Update the status label based on strength
         self.password_status.update_text(strength)
         self.password_status.setStyleSheet(f"color: {color};")
+
+    def on_checkbox_state_changed(self):
+        """
+        Enable or disable the confirm button based on the checkbox state.
+        """
+        self.confirm_button.setEnabled(self.checkbox_agree.isChecked())
 
     def save_password(self, master_password: str) -> None:
         if master_password:

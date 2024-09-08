@@ -1,4 +1,5 @@
-from PySide6.QtWidgets import QDialog, QMessageBox
+from PySide6.QtGui import QPixmap
+from PySide6.QtWidgets import QDialog, QMessageBox, QLabel
 
 from generator.assets import Assets
 from notification.utilities import show_message_box
@@ -14,6 +15,15 @@ from themes.labels.text_label import TextLabel
 class AddPasswordDialog(QDialog):
     def __init__(self, parent=None):
         super().__init__(parent)
+
+        self.bg_label = None
+
+        # Set the dialog size before setting the background image
+        self.setWindowTitle(MESSAGES.ADD_PASSWORD)
+        self.setFixedSize(400, 250)
+
+        self.set_background_image()
+
         self.password_status = None
         self.generate_password_button = None
         self.input_password = None
@@ -22,12 +32,15 @@ class AddPasswordDialog(QDialog):
         self.input_label = None
         self.save_button = None
 
-        self.setWindowTitle(MESSAGES.ADD_PASSWORD)
-        self.setFixedSize(400, 250)
-
         self.password_utilities = PasswordUtilities()
 
         self.load_base_widgets()
+
+    def set_background_image(self):
+        self.bg_label = QLabel(self)
+        self.bg_label.setPixmap(QPixmap(Assets.dialog_background_png))
+        self.bg_label.setGeometry(0, 0, self.width(), self.height())
+        self.bg_label.setScaledContents(True)
 
     def load_base_widgets(self):
         self.label_status = TextLabel(
