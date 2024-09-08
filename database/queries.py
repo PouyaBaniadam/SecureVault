@@ -37,3 +37,5 @@ class Queries:
     insert_or_ignore_passwords = """
     INSERT OR IGNORE INTO passwords (label, encrypted_password, nonce, tag, salt) VALUES (?, ?, ?, ?, ?)
 """
+
+    delete_password

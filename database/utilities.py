@@ -11,10 +11,11 @@ from encyption.utilities import EncryptionUtilities
 from general.utilities import restart_application
 from notification.utilities import show_message_box
 from statics.messages import MESSAGES
+from statics.settings import SETTINGS
 
 
 class DatabaseUtilities:
-    def __init__(self, db_name, encryption_utilities):
+    def __init__(self, db_name=SETTINGS.DB_NAME, encryption_utilities=EncryptionUtilities):
         """
         Initialize the PasswordManager class with a database name and an encryption utility instance.
         """

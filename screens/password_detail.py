@@ -1,9 +1,11 @@
 import pyperclip
 from PySide6.QtCore import QTimer
 from PySide6.QtGui import QPixmap
-from PySide6.QtWidgets import QDialog, QLabel
+from PySide6.QtWidgets import QDialog, QLabel, QMessageBox
 
+from database.utilities import DatabaseUtilities
 from generator.assets import Assets
+from notification.utilities import show_message_box, show_confirmation_dialog
 from statics.messages import MESSAGES
 from statics.settings import SETTINGS
 from themes.buttons.icon_button import IconButton
@@ -119,7 +121,7 @@ class PasswordDetailsDialog(QDialog):
             y=200,
             w=150,
             h=30,
-            on_click=self.close,
+            on_click=self.delete_password,
             background_color=SETTINGS.DANGER_COLOR,
             color=SETTINGS.LIGHT_COLOR,
             border_radius=SETTINGS.BUTTON_BORDER_RADIUS,
@@ -140,3 +142,17 @@ class PasswordDetailsDialog(QDialog):
 
     def hide_notification(self):
         self.notification_label.hide()
+
+    def delete_password(self):
+        if show_confirmation_dialog(parent=self, message=MESSAGES.DELETION_CONFIRMATION_MESSAGE):
+            database_utilities = DatabaseUtilities()
+            database_utilities.delete_password(label=self.label)
+
+            show_message_box(
+                self,
+                title=MESSAGES.SUCCESS,
+                icon_type=QMessageBox.Information,
+                message=MESSAGES.DELETED_SUCCESSFULLY
+            )
+
+            self.close()

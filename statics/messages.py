@@ -50,7 +50,7 @@ You do not have access to any of your previous passwords until you give me the p
     IMPORTED_DATA_SUCCESSFULLY = "Data imported successfully from JSON file."
     DELETED_SUCCESSFULLY = "Everything deleted successfully."
     DELETE = "Delete"
-    DELETION_CONFIRMATION_MESSAGE = "Are you sure you want to delete everything?"
+    DELETION_CONFIRMATION_MESSAGE = "Are you sure you want to delete?"
     DATA_IS_VALID = "Data validated successfully."
     APP_RESTARTS_NOW = "The application will now restart."
     AGREE_TERMS = "I agree to the terms."
