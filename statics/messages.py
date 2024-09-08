@@ -33,6 +33,7 @@ all your passwords are gonna be lost."""
     CLOSE = "Close"
     PASSWORD_COPIED = "Password copied successfully."
     MASTER_PASSWORD_NOT_THE_SAME = """Your current master password is not the same as the previous one.
+Restarting the app might work until the next update! but if it did not work either,
 You do not have access to any of your previous passwords until you give me the previous master password."""
     ERROR = "Error"
     ERROR_HAPPENED = "An error occurred."
