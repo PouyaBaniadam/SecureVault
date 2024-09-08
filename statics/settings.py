@@ -1,9 +1,24 @@
+import os
 import string
+from pathlib import Path
 
 
 class SETTINGS:
     # Data base
-    DB_NAME = "password_manager.db"
+    @staticmethod
+    def get_documents_directory():
+        """Get the path to the user's Documents directory, regardless of OS."""
+        # For Windows
+        if os.name == "nt":
+            documents_dir = Path(os.environ["USERPROFILE"]) / "Documents"
+        else:  # For macOS and Linux
+            documents_dir = Path.home() / "Documents"
+
+        # Ensure the directory exists
+        documents_dir.mkdir(parents=True, exist_ok=True)
+        return documents_dir
+
+    DB_NAME = str(get_documents_directory() / "password_manager.db")
 
     # UI
     PRIMARY_COLOR = "#5200BA"

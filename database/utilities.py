@@ -3,7 +3,7 @@ import json
 import os
 import sqlite3
 
-from PySide6.QtWidgets import QMessageBox
+from PySide6.QtWidgets import QMessageBox, QApplication
 from cryptography.exceptions import InvalidTag
 
 from database.queries import Queries
@@ -22,10 +22,10 @@ class DatabaseUtilities:
         self.encryption_util = encryption_utilities
         self.labels_cache = []  # Cache for labels
         self.password_cache = {}  # Cache for passwords
-        self._initialize_database()
+        self.initialize_database()
         self.load_all_labels()  # Load all labels on initialization
 
-    def _initialize_database(self):
+    def initialize_database(self):
         """Create the database and the passwords table if it doesn't exist."""
         conn = sqlite3.connect(self.db_name)
         cursor = conn.cursor()
@@ -274,8 +274,11 @@ class DatabaseUtilities:
 
         return has_errors, message
 
-    @staticmethod
-    def delete_database(parent, path):
+    def delete_database(self, parent, path):
+        # To avoid circular imports, we import the SetupMasterPasswordPage within the function.
+
+        from screens.setup_master_password import SetupMasterPasswordPage
+
         os.remove(path=path)
         parent.close()
 
@@ -285,4 +288,11 @@ class DatabaseUtilities:
             icon_type=QMessageBox.Information,
             message=f"{MESSAGES.DELETED_SUCCESSFULLY}\n{MESSAGES.PLEASE_RESTART_THE_APP}",
         )
+
+        #TODO: If possible close the app and then re-open it. make it more user friendly.
+
+        self.initialize_database()
+
+        setup_page = SetupMasterPasswordPage(database_utilities=self)
+        setup_page.show()
 
