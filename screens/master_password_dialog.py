@@ -167,7 +167,7 @@ class UpdateMasterPasswordDialog(QDialog):
         self.submit_button = TextButton(
             parent=self,
             text=MESSAGES.SUBMIT,
-            x=100,
+            x=220,
             y=310,
             w=100,
             h=30,
@@ -180,7 +180,7 @@ class UpdateMasterPasswordDialog(QDialog):
         self.cancel_button = TextButton(
             parent=self,
             text=MESSAGES.CANCEL,
-            x=220,
+            x=100,
             y=310,
             w=100,
             h=30,
@@ -279,7 +279,7 @@ class CheckMaterPasswordDialog(QDialog):
         self.submit_button = None
         self.cancel_button = None
 
-        self.setWindowTitle(MESSAGES.UPDATE_MASTER_PASSWORD)
+        self.setWindowTitle(MESSAGES.DELETION_EVERYTHING_CONFIRMATION)
         self.setFixedSize(400, 200)
 
         self.set_background_image()
@@ -333,12 +333,12 @@ class CheckMaterPasswordDialog(QDialog):
         self.submit_button = TextButton(
             parent=self,
             text=MESSAGES.SUBMIT,
-            x=100,
+            x=220,
             y=150,
             w=100,
             h=30,
             on_click=self.validate_and_save,
-            background_color=SETTINGS.PRIMARY_COLOR,
+            background_color=SETTINGS.DANGER_COLOR,
             color=SETTINGS.LIGHT_COLOR,
             border_radius=SETTINGS.BUTTON_BORDER_RADIUS,
         )
@@ -346,7 +346,7 @@ class CheckMaterPasswordDialog(QDialog):
         self.cancel_button = TextButton(
             parent=self,
             text=MESSAGES.CANCEL,
-            x=220,
+            x=100,
             y=150,
             w=100,
             h=30,

@@ -14,7 +14,7 @@ def restart_application(parent):
         parent=parent,
         title=MESSAGES.SUCCESS,
         icon_type=QMessageBox.Information,
-        message=f"{MESSAGES.DELETES_SUCCESSFULLY}\n{MESSAGES.APP_RESTARTS_NOW}",
+        message=f"{MESSAGES.DELETED_SUCCESSFULLY}\n{MESSAGES.APP_RESTARTS_NOW}",
     )
 
     # Check if the user clicked "OK"

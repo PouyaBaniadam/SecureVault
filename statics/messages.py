@@ -48,11 +48,13 @@ You do not have access to any of your previous passwords until you give me the p
     CURRENT_PASSWORD_EMPTY = "Current master password is empty."
     EXPORTED_DATA_SUCCESSFULLY = "All passwords have been exported as a JSON file."
     IMPORTED_DATA_SUCCESSFULLY = "Data imported successfully from JSON file."
-    DELETES_SUCCESSFULLY = "Everything deleted successfully."
+    DELETED_SUCCESSFULLY = "Everything deleted successfully."
+    DELETE = "Delete"
     DELETION_CONFIRMATION_MESSAGE = "Are you sure you want to delete everything?"
     DATA_IS_VALID = "Data validated successfully."
     APP_RESTARTS_NOW = "The application will now restart."
     AGREE_TERMS = "I agree to the terms."
+    DELETION_EVERYTHING_CONFIRMATION = "Delete everything confirmation"
 
     @staticmethod
     def field_is_required(field):
