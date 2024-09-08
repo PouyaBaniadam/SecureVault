@@ -1,6 +1,4 @@
 ### Screenshot of the App
-
-### Screenshot from the app
 ![SecureVault App Screenshot](https://github.com/PouyaBaniadam/SecureVault/blob/master/markdown-assets/img.png)
 
 ## SecureVault: A Modern Password Manager
