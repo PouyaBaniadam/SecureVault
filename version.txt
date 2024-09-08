@@ -13,11 +13,13 @@ VSVersionInfo(
     StringFileInfo(
       [
         StringTable(
-          '040904B0',
-           StringStruct('FileDescription', 'A strong password manager written in Python'),
-           StringStruct('FileVersion', '1.0.0.0'),
-           StringStruct('ProductName', 'Your Product Name'),
-           StringStruct('ProductVersion', '1.0.0.0')]
+          '040904B0',        # Language and codepage (default: US English)
+          [
+            StringStruct('FileDescription', 'A strong password manager written in Python'),
+            StringStruct('FileVersion', '1.0.0.0'),          # Version number
+            StringStruct('ProductName', 'Secure Vault'),
+            StringStruct('ProductVersion', '1.0.0.0')        # Product version
+          ]
         )
       ]
     ),
