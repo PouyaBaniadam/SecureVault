@@ -71,6 +71,19 @@ class SecureVault(QMainWindow):
             selection_background_color=SETTINGS.PRIMARY_COLOR
         )
 
+        self.results_list = ListWidget(
+            parent=self,
+            x=30,
+            y=100,
+            w=330,
+            h=140,
+            color=SETTINGS.LIGHT_COLOR,
+            border_color=SETTINGS.PRIMARY_COLOR,
+            background_color=SETTINGS.DARK_COLOR,
+            border_radius=10,
+            padding=10,
+        )
+
         self.add_password = IconButton(
             parent=self,
             icon_path=Assets.padlock_png,
@@ -123,26 +136,13 @@ class SecureVault(QMainWindow):
             color=SETTINGS.LIGHT_COLOR,
         )
 
-        self.results_list = ListWidget(
-            parent=self,
-            x=30,
-            y=100,
-            w=300,
-            h=200,
-            color=SETTINGS.LIGHT_COLOR,
-            border_color=SETTINGS.PRIMARY_COLOR,
-            background_color=SETTINGS.DARK_COLOR,
-            border_radius=10,
-            padding=10,
-        )
-
         self.trash_button = IconButton(
             parent=self,
             icon_path=Assets.trash_png,
-            x=180,
-            y=290,
-            w=SETTINGS.ICON_SIZE / 1.2,
-            h=SETTINGS.ICON_SIZE / 1.2,
+            x=175,
+            y=275,
+            w=SETTINGS.ICON_SIZE / 1.1,
+            h=SETTINGS.ICON_SIZE / 1.1,
             on_click=self.delete_everything,
         )
 

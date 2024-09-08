@@ -68,7 +68,7 @@ class PasswordUtilities:
         :return: has_errors and message
         """
 
-        message = ""
+        message = MESSAGES.PASSWORD_SAVED
         has_errors = False
 
         if label_name == "" or plain_password == "":
@@ -82,8 +82,6 @@ class PasswordUtilities:
         else:
             # Save encrypted password to the database
             self.password_manager.add_password(label_name, plain_password)
-            message = MESSAGES.PASSWORD_SAVED
-            has_errors = False
 
         return has_errors, message
 
