@@ -52,7 +52,7 @@ You do not have access to any of your previous passwords until you give me the p
     DELETE = "Delete"
     DELETION_CONFIRMATION_MESSAGE = "Are you sure you want to delete?"
     DATA_IS_VALID = "Data validated successfully."
-    APP_RESTARTS_NOW = "The application will now restart."
+    PLEASE_RESTART_THE_APP = "Please restart the app to avoid some bugs."
     AGREE_TERMS = "I agree to the terms."
     DELETION_EVERYTHING_CONFIRMATION = "Delete everything confirmation"
 

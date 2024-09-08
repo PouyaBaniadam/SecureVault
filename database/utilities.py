@@ -8,7 +8,6 @@ from cryptography.exceptions import InvalidTag
 
 from database.queries import Queries
 from encyption.utilities import EncryptionUtilities
-from general.utilities import restart_application
 from notification.utilities import show_message_box
 from statics.messages import MESSAGES
 from statics.settings import SETTINGS
@@ -280,4 +279,10 @@ class DatabaseUtilities:
         os.remove(path=path)
         parent.close()
 
-        restart_application(parent=parent)
+        show_message_box(
+            parent=parent,
+            title=MESSAGES.SUCCESS,
+            icon_type=QMessageBox.Information,
+            message=f"{MESSAGES.DELETED_SUCCESSFULLY}\n{MESSAGES.PLEASE_RESTART_THE_APP}",
+        )
+
