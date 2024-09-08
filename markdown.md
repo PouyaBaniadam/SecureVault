@@ -1,3 +1,6 @@
+### Screenshot of the App
+![SecureVault App Screenshot](https://github.com/PouyaBaniadam/SecureVault/blob/master/markdown-assets/img.png)
+
 ## SecureVault: A Modern Password Manager
 
 **SecureVault** is a powerful and secure password manager designed with a sleek and modern UI using **PySide6**. This application provides users with a seamless experience to securely store, manage, and retrieve passwords, all while maintaining high levels of security through advanced encryption techniques.
@@ -24,14 +27,8 @@
 - **Argon2 Hashing**: Uses Argon2, a memory-hard key derivation function to hash the master password, making it resistant to brute-force attacks.
 - **AES-GCM Encryption**: Employs AES in Galois/Counter Mode (GCM) to encrypt passwords with confidentiality and integrity protection.
 - **Dynamic Key Derivation**: Each password encryption uses a unique salt, making it highly secure and difficult to crack.
-
-### Screenshot of the App
-
-
 ### Conclusion
 
 SecureVault is designed to be a comprehensive solution for securely managing passwords. With its modern UI and advanced security features, it aims to provide users with the best combination of ease of use and robust protection against data breaches.
 
 ---
-
-Feel free to add the URL to the screenshot of your app where indicated!
