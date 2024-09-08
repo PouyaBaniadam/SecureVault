@@ -1,12 +1,7 @@
 ### Screenshot of the App
 
+### Screenshot from the app
 ![SecureVault App Screenshot](https://github.com/PouyaBaniadam/SecureVault/blob/master/markdown-assets/img.png)
-
-This line will display the image directly in your markdown document, provided that the URL points to an actual image file that is accessible publicly. Just make sure the URL is correct and accessible to everyone who views the markdown file.
-
-Here's the updated section with the embedded image:
-
----
 
 ## SecureVault: A Modern Password Manager
 
