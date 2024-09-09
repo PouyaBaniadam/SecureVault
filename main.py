@@ -9,7 +9,6 @@ from generator.assets import Assets
 from password.utilities import PasswordUtilities
 from screens.main import SecureVault
 from screens.setup_master_password import SetupMasterPasswordPage
-from statics.settings import SETTINGS
 
 if __name__ == "__main__":
     # UI loader
