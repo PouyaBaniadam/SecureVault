@@ -57,6 +57,7 @@ You do not have access to any of your previous passwords until you give me the p
     AGREE_TERMS = "I agree to the terms."
     DELETION_EVERYTHING_CONFIRMATION = "Delete everything confirmation"
     UPDATE = "Update"
+    EMPTY_PASSWORD_ERROR = "Password can't be empty."
 
 
     @staticmethod

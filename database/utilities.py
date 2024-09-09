@@ -77,33 +77,32 @@ class DatabaseUtilities:
         message = ""
         decrypted_password = None
 
-        # If we have the password in the cache, then there is no point of an extra query at all!
-        if label in self.password_cache:
-            decrypted_password = self.password_cache[label]
+        # Fetch from the database
+        conn = sqlite3.connect(self.db_name)
+        cursor = conn.cursor()
+        cursor.execute(Queries.retrieve_password, (label,))
+        row = cursor.fetchone()
+        conn.close()
 
-        else:
-            # Fetch from the database
-            conn = sqlite3.connect(self.db_name)
-            cursor = conn.cursor()
-            cursor.execute(Queries.retrieve_password, (label,))
-            row = cursor.fetchone()
-            conn.close()
+        encrypted_password, nonce, tag, salt = row
+        try:
+            # Decrypt the password
+            decrypted_password = self.encryption_utilities.decrypt_password(encrypted_password, nonce, tag, salt)
+            self.password_cache[label] = decrypted_password
 
-            encrypted_password, nonce, tag, salt = row
-            try:
-                # Decrypt the password
-                decrypted_password = self.encryption_utilities.decrypt_password(encrypted_password, nonce, tag, salt)
-                self.password_cache[label] = decrypted_password
-
-            # This usually happens if the master password is not the same. So we rely on that :)
-            except InvalidTag:
-                has_errors = True
-                message = MESSAGES.MASTER_PASSWORD_NOT_THE_SAME
+        # This usually happens if the master password is not the same. So we rely on that :)
+        except InvalidTag:
+            has_errors = True
+            message = MESSAGES.MASTER_PASSWORD_NOT_THE_SAME
 
         return has_errors, message, decrypted_password
 
     def update_password(self, label, new_plain_password):
         """Update an existing password in the database and clear the cache for the updated label."""
+
+        has_errors = False
+        message = MESSAGES.PASSWORD_UPDATE_SUCCESS
+
         # Encrypt the new password
         encrypted_password, nonce, tag, salt = self.encryption_utilities.encrypt_password(new_plain_password)
 
@@ -117,6 +116,8 @@ class DatabaseUtilities:
         # Remove from the cache if it exists
         if label in self.password_cache:
             del self.password_cache[label]
+
+        return has_errors, message
 
     def delete_password(self, label):
         """Delete a password from the database and update the labels cache."""
