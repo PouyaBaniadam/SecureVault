@@ -1,7 +1,7 @@
 VSVersionInfo(
   ffi=FixedFileInfo(
-    filevers=(1, 0, 0, 0),  # File version (major, minor, build, revision)
-    prodvers=(1, 0, 0, 0),  # Product version
+    filevers=(1, 1, 0, 0),  # File version (major, minor, build, revision)
+    prodvers=(1, 1, 0, 0),  # Product version
     mask=0x3f,              # Bitmask for valid fields
     flags=0x0,              # File flags (usually 0)
     OS=0x40004,             # Operating system indicator
@@ -16,9 +16,9 @@ VSVersionInfo(
           '040904B0',        # Language and codepage (default: US English)
           [
             StringStruct('FileDescription', 'A strong password manager written in Python'),
-            StringStruct('FileVersion', '1.0.0.0'),          # Version number
+            StringStruct('FileVersion', '1.1.0.0'),          # Version number
             StringStruct('ProductName', 'Secure Vault'),
-            StringStruct('ProductVersion', '1.0.0.0')        # Product version
+            StringStruct('ProductVersion', '1.1.0.0')        # Product version
           ]
         )
       ]
