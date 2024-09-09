@@ -13,7 +13,7 @@ from statics.settings import SETTINGS
 
 
 class PasswordUtilities:
-    def __init__(self, db_name=SETTINGS.DB_NAME):
+    def __init__(self):
         """
         Initialize the PasswordUtilities class with database and encryption utilities.
         """
@@ -24,7 +24,7 @@ class PasswordUtilities:
         self.encryption_util = EncryptionUtilities(master_password=self.master_password)
 
         # Initialize password manager
-        self.password_manager = DatabaseUtilities(db_name, self.encryption_util)
+        self.password_manager = DatabaseUtilities()
 
     @staticmethod
     def evaluate_password_strength(plain_password: str) -> tuple:

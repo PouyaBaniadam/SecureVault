@@ -288,10 +288,7 @@ class CheckMaterPasswordDialog(QDialog):
         self.encryption_utilities = EncryptionUtilities(
             master_password=SETTINGS.MASTER_PASSWORD
         )
-        self.database_utilities = DatabaseUtilities(
-            db_name=SETTINGS.DB_NAME,
-            encryption_utilities=self.encryption_utilities
-        )
+        self.database_utilities = DatabaseUtilities()
 
         self.load_base_widgets()
 

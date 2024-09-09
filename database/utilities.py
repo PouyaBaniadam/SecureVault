@@ -3,7 +3,7 @@ import json
 import os
 import sqlite3
 
-from PySide6.QtWidgets import QMessageBox, QApplication
+from PySide6.QtWidgets import QMessageBox
 from cryptography.exceptions import InvalidTag
 
 from database.queries import Queries
@@ -14,12 +14,16 @@ from statics.settings import SETTINGS
 
 
 class DatabaseUtilities:
-    def __init__(self, db_name=SETTINGS.DB_NAME, encryption_utilities=EncryptionUtilities):
+    def __init__(self):
         """
         Initialize the PasswordManager class with a database name and an encryption utility instance.
         """
-        self.db_name = db_name
-        self.encryption_util = encryption_utilities
+
+        # To avoid circular imports, we import the PasswordUtilities within the function.
+        from password.utilities import PasswordUtilities
+
+        self.db_name = SETTINGS.DB_NAME
+        self.encryption_utilities = EncryptionUtilities(master_password=PasswordUtilities.get_master_password())
         self.labels_cache = []  # Cache for labels
         self.password_cache = {}  # Cache for passwords
         self.initialize_database()
@@ -50,7 +54,7 @@ class DatabaseUtilities:
     def add_password(self, label, plain_password):
         """Encrypt and add a password to the database and update the labels cache."""
         # Encrypt the password
-        encrypted_password, nonce, tag, salt = self.encryption_util.encrypt_password(plain_password)
+        encrypted_password, nonce, tag, salt = self.encryption_utilities.encrypt_password(plain_password)
 
         # Save to the database
         conn = sqlite3.connect(self.db_name)
@@ -88,7 +92,7 @@ class DatabaseUtilities:
             encrypted_password, nonce, tag, salt = row
             try:
                 # Decrypt the password
-                decrypted_password = self.encryption_util.decrypt_password(encrypted_password, nonce, tag, salt)
+                decrypted_password = self.encryption_utilities.decrypt_password(encrypted_password, nonce, tag, salt)
                 self.password_cache[label] = decrypted_password
 
             # This usually happens if the master password is not the same. So we rely on that :)
@@ -101,7 +105,7 @@ class DatabaseUtilities:
     def update_password(self, label, new_plain_password):
         """Update an existing password in the database and clear the cache for the updated label."""
         # Encrypt the new password
-        encrypted_password, nonce, tag, salt = self.encryption_util.encrypt_password(new_plain_password)
+        encrypted_password, nonce, tag, salt = self.encryption_utilities.encrypt_password(new_plain_password)
 
         # Update in the database
         conn = sqlite3.connect(self.db_name)
@@ -295,4 +299,3 @@ class DatabaseUtilities:
 
         setup_page = SetupMasterPasswordPage(database_utilities=self)
         setup_page.show()
-

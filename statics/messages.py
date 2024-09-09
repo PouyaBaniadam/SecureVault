@@ -56,6 +56,8 @@ You do not have access to any of your previous passwords until you give me the p
     PLEASE_RESTART_THE_APP = "Please restart the previous instance of the app to avoid bugs."
     AGREE_TERMS = "I agree to the terms."
     DELETION_EVERYTHING_CONFIRMATION = "Delete everything confirmation"
+    UPDATE = "Update"
+
 
     @staticmethod
     def field_is_required(field):

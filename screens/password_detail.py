@@ -6,6 +6,7 @@ from PySide6.QtWidgets import QDialog, QLabel, QMessageBox
 from database.utilities import DatabaseUtilities
 from generator.assets import Assets
 from notification.utilities import show_message_box, show_confirmation_dialog
+from screens.update_password import UpdatePasswordDialog
 from statics.messages import MESSAGES
 from statics.settings import SETTINGS
 from themes.buttons.icon_button import IconButton
@@ -17,6 +18,7 @@ from themes.labels.text_label import TextLabel
 class PasswordDetailsDialog(QDialog):
     def __init__(self, label, password, parent=None):
         super().__init__(parent)
+        self.update_button = None
         self.delete_button = None
         self.trash_button = None
         self.bg_label = None
@@ -104,9 +106,9 @@ class PasswordDetailsDialog(QDialog):
         self.close_button = TextButton(
             parent=self,
             text=MESSAGES.CLOSE,
-            x=30,
+            x=20,
             y=200,
-            w=150,
+            w=100,
             h=30,
             on_click=self.close,
             background_color=SETTINGS.PRIMARY_COLOR,
@@ -117,12 +119,25 @@ class PasswordDetailsDialog(QDialog):
         self.delete_button = TextButton(
             parent=self,
             text=MESSAGES.DELETE,
-            x=210,
+            x=280,
             y=200,
-            w=150,
+            w=100,
             h=30,
             on_click=self.delete_password,
             background_color=SETTINGS.DANGER_COLOR,
+            color=SETTINGS.LIGHT_COLOR,
+            border_radius=SETTINGS.BUTTON_BORDER_RADIUS,
+        )
+
+        self.update_button = TextButton(
+            parent=self,
+            text=MESSAGES.UPDATE,
+            x=150,
+            y=200,
+            w=100,
+            h=30,
+            on_click=self.update_password,
+            background_color=SETTINGS.INFO_COLOR,
             color=SETTINGS.LIGHT_COLOR,
             border_radius=SETTINGS.BUTTON_BORDER_RADIUS,
         )
@@ -159,3 +174,21 @@ class PasswordDetailsDialog(QDialog):
             self.parent().clear_search_input()
 
             self.close()
+
+    def update_password(self):
+        # Open a dialog to update the password
+        dialog = UpdatePasswordDialog(self.label, self.password, parent=self)
+        if dialog.exec():
+            new_label = dialog.label_edit.text()
+            new_password = dialog.password_edit.text()
+
+            database_utilities = DatabaseUtilities()
+            database_utilities.update_password(new_label, new_password)
+
+            # Update the displayed label and password
+            self.label = new_label
+            self.password = new_password
+            self.label_status.setText(f"{MESSAGES.LABEL} : {self.label}")
+            self.password_label.setText(f"{MESSAGES.PASSWORD} : {self.password}")
+
+            self.show_notification(MESSAGES.PASSWORD_UPDATE_SUCCESS)

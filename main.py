@@ -26,7 +26,7 @@ if __name__ == "__main__":
 
     # Initializations
     encryption_utilities = EncryptionUtilities(master_password=master_password)
-    database_utilities = DatabaseUtilities(db_name=SETTINGS.DB_NAME, encryption_utilities=encryption_utilities)
+    database_utilities = DatabaseUtilities()
 
     # Page loading
     if master_password == "":
