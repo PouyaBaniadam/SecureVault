@@ -10,9 +10,9 @@ class SETTINGS:
         """Get the path to the user's Documents directory, regardless of OS."""
         # For Windows
         if os.name == "nt":
-            documents_dir = Path(os.environ["USERPROFILE"]) / "Documents/Database"
+            documents_dir = Path(os.environ["USERPROFILE"]) / "Documents/SecureVault/Database"
         else:  # For macOS and Linux
-            documents_dir = Path.home() / "Documents/Database"
+            documents_dir = Path.home() / "Documents/SecureVault/Database"
 
         # Ensure the directory exists
         documents_dir.mkdir(parents=True, exist_ok=True)
